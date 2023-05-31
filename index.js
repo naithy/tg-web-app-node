@@ -41,7 +41,7 @@ bot.on('message', async (msg) => {
 
             setTimeout(async () => {
                 await bot.sendMessage(chatId, data?.name)
-            })
+            }, 3000)
 
         } catch (e) {
             console.log(e)
