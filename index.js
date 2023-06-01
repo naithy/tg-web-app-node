@@ -25,29 +25,30 @@ app.post('/web-data', async (req, res) => {
             });
             return acc;
         }, []);
-        await bot.sendInvoice(
-            5212881326,
-            title,
-            'dssd',
-            'payload',
-            '1744374395:TEST:b86b8d2a26f4473364a2',
-            'RUB',
-            {
-                newCart
-            }
-        )
+        console.log(newCart)
+        saveNewCart = newCart
+        console.log(saveNewCart)
     } catch (e) {
         console.log('error')
     }
 })
-// bot.onText(/\/pay/, (msg) => {
-//     console.log(saveNewCart)
-//     const chatId = msg.chat.id
-//
-//
-// })
-//
-// let saveNewCart;
+bot.onText(/\/pay/, (msg) => {
+    console.log(saveNewCart)
+    const chatId = msg.chat.id
+    bot.sendInvoice(
+        chatId,
+        title,
+        'dssd',
+        'payload',
+        '1744374395:TEST:b86b8d2a26f4473364a2',
+        'RUB',
+        {
+            saveNewCart
+        }
+    )
+})
+
+let saveNewCart;
 const title = 'Заказ #1313'
 
 bot.on('pre_checkout_query', (query) => {
