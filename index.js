@@ -12,7 +12,10 @@ app.use(express.json());
 app.use(cors());
 
 
-
+bot.on('message', (msg) => {
+    const chatId = msg.chat.id;
+    bot.sendMessage(chatId)
+})
 
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
