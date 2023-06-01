@@ -19,38 +19,35 @@ app.post('/web-data', async (req, res) => {
             const { flavors, ...rest } = item;
             Object.keys(flavors).forEach(flavor => {
                 acc.push({
-                    title: `${rest.title} ${flavor}`,
-                    price: rest.price * 100
+                    label: `${rest.title} ${flavor}`,
+                    amount: rest.price * 100
                 });
             });
-            console.log(newCart)
             return acc;
         }, []);
-        console.log(newCart)
-        saveNewCart = newCart
-        console.log(saveNewCart)
+        await bot.sendInvoice(
+            5212881326,
+            title,
+            'dssd',
+            'payload',
+            '1744374395:TEST:b86b8d2a26f4473364a2',
+            'RUB',
+            {
+                newCart
+            }
+        )
     } catch (e) {
         console.log('error')
     }
 })
-bot.onText(/\/pay/, (msg) => {
-    console.log(saveNewCart)
-    const chatId = msg.chat.id
-
-    bot.sendInvoice(
-        chatId,
-        title,
-        'dssd',
-        'payload',
-        '1744374395:TEST:b86b8d2a26f4473364a2',
-        'RUB',
-        {
-            saveNewCart
-        }
-    )
-})
-
-let saveNewCart;
+// bot.onText(/\/pay/, (msg) => {
+//     console.log(saveNewCart)
+//     const chatId = msg.chat.id
+//
+//
+// })
+//
+// let saveNewCart;
 const title = 'Заказ #1313'
 
 bot.on('pre_checkout_query', (query) => {
