@@ -41,7 +41,9 @@ bot.onText(/\/pay/, (msg) => {
         'payload',
         '1744374395:TEST:b86b8d2a26f4473364a2',
         'RUB',
-        saveNewCart
+        {
+            saveNewCart
+        }
     )
 })
 
