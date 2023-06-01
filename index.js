@@ -14,7 +14,7 @@ app.use(cors());
 
 bot.on('message', (msg) => {
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId)
+    bot.sendMessage(chatId, `chat ${chatId}`)
 })
 
 app.post('/web-data', async (req, res) => {
