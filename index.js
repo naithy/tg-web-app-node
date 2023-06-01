@@ -38,7 +38,7 @@ bot.onText(/\/pay/, (msg) => {
         chatId,
         title,
         'dssd',
-        '',
+        'payload',
         '1744374395:TEST:b86b8d2a26f4473364a2',
         'RUB',
         saveNewCart
