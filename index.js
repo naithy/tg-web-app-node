@@ -12,11 +12,6 @@ app.use(express.json());
 app.use(cors());
 
 
-bot.on('message', (msg) => {
-    const chatId = msg.chat.id;
-    bot.sendMessage(chatId, `chat ${chatId}`)
-})
-
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
     try {
@@ -31,25 +26,13 @@ app.post('/web-data', async (req, res) => {
 
             return acc;
         }, []);
-        await bot.sendInvoice(
-            5212881326,
-            title,
-            'dssd',
-            '',
-            '1744374395:TEST:b86b8d2a26f4473364a2',
-            'RUB',
-            newCart
-        )
+        saveNewCart = newCart
     } catch (e) {
         console.log('error')
     }
 })
-
-const title = 'Заказ #1313'
-
-
-
-bot.onText(/\/pay/, msg => {
+bot.onText(/\/pay/, (msg) => {
+    const chatId = msg.chat.id
 
     bot.sendInvoice(
         chatId,
@@ -58,9 +41,12 @@ bot.onText(/\/pay/, msg => {
         '',
         '1744374395:TEST:b86b8d2a26f4473364a2',
         'RUB',
-        products
+        saveNewCart
     )
 })
+
+let saveNewCart;
+const title = 'Заказ #1313'
 
 bot.on('pre_checkout_query', (query) => {
     bot.answerPreCheckoutQuery(query.id, true)
