@@ -15,7 +15,7 @@ app.use(cors());
 
 
 app.post('/web-data', async (req, res) => {
-    const {totalPrice, cart} = req.body;
+    const {queryID, cart} = req.body;
     try {
         const newCart = Object.entries(cart).reduce((acc, [key, item]) => {
             const { flavors, ...rest } = item;
@@ -28,23 +28,31 @@ app.post('/web-data', async (req, res) => {
 
             return acc;
         }, []);
-        products = newCart
+        await bot.sendInvoice(
+            queryID,
+            title,
+            'dssd',
+            '',
+            '1744374395:TEST:b86b8d2a26f4473364a2',
+            'RUB',
+            newCart
+        )
     } catch (e) {
         console.log('error')
     }
 })
 
 const title = 'Заказ #1313'
-let products;
+
 
 
 bot.onText(/\/pay/, msg => {
-    const chatId = msg.chat.id
+
     bot.sendInvoice(
         chatId,
         title,
         'dssd',
-        'dsds',
+        '',
         '1744374395:TEST:b86b8d2a26f4473364a2',
         'RUB',
         products
