@@ -23,7 +23,7 @@ app.post('/web-data', async (req, res) => {
                     price: rest.price * 100
                 });
             });
-
+            console.log(newCart)
             return acc;
         }, []);
         console.log(newCart)
