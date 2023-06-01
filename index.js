@@ -32,6 +32,7 @@ app.post('/web-data', async (req, res) => {
     }
 })
 bot.onText(/\/pay/, (msg) => {
+    console.log(saveNewCart)
     const chatId = msg.chat.id
 
     bot.sendInvoice(
