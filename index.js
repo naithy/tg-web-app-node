@@ -26,7 +26,9 @@ app.post('/web-data', async (req, res) => {
 
             return acc;
         }, []);
+        console.log(newCart)
         saveNewCart = newCart
+        console.log(saveNewCart)
     } catch (e) {
         console.log('error')
     }
