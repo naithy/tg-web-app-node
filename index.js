@@ -25,7 +25,14 @@ const server = https.createServer(options, app)
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
     try {
-        console.log(queryID, cart)
+        await bot.answerWebAppQuery(queryID, {
+            type: 'article',
+            id: queryID,
+            title: 'Успешная покупка',
+            input_message_content: {
+                message_text: `Поздравляю с покупкой, вы приобрели товар на сумму`
+            }
+        })
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
