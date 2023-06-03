@@ -23,14 +23,14 @@ app.use(cors());
 const server = https.createServer(options, app)
 
 app.post('/web-data', async (req, res) => {
-    const {queryID, cart} = req.body;
+    const {queryID, cart, totalPrice} = req.body;
     try {
         await bot.answerWebAppQuery(queryID, {
             type: 'article',
             id: queryID,
             title: 'Успешная покупка',
             input_message_content: {
-                message_text: `Поздравляю с покупкой, вы приобрели товар на сумму`
+                message_text: `Поздравляю с покупкой, вы приобрели товар на сумму ${totalPrice}`
             }
         })
         return res.status(200).json({});
