@@ -6,8 +6,8 @@ const http = require('http');
 const fs = require('fs');
 
 const options = {
-    cert: fs.readFileSync('./fullchain.pem'),
-    key: fs.readFileSync('./privkey.pem')
+    cert: fs.readFileSync('fullchain.pem'),
+    key: fs.readFileSync('privkey.pem')
 };
 
 const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
