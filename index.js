@@ -33,8 +33,5 @@ app.post('/web-data', async (req, res) => {
 
 let saveNewCart;
 const title = 'Заказ #1313'
-
-const httpServer = http.createServer(app)
-httpServer.listen(8000, () => {
-    console.log("HTTP Server up and running on port 8000");
-})
+app.listen(8000)
+https.createServer(options, app)
