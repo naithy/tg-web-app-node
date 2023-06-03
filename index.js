@@ -9,7 +9,9 @@ const bot = new TelegramBot(token, {polling: true});
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'https://magical-moxie-a1c933.netlify.app'
+}));
 
 
 app.post('/web-data', async (req, res) => {
