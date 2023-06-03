@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
+app.set('trust proxy', 'loopback')
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
     try {
