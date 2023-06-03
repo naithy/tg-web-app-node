@@ -25,38 +25,14 @@ app.post('/web-data', async (req, res) => {
             });
             return acc;
         }, []);
-        console.log(newCart)
-        saveNewCart = newCart
-        console.log(saveNewCart)
+        await bot.answerWebAppQuery(queryID, newCart)
     } catch (e) {
         console.log('error')
     }
 })
-bot.onText(/\/pay/, (msg) => {
-    console.log(saveNewCart)
-    const chatId = msg.chat.id
-    bot.sendInvoice(
-        chatId,
-        title,
-        'dssd',
-        'payload',
-        '1744374395:TEST:b86b8d2a26f4473364a2',
-        'RUB',
-        {
-            saveNewCart
-        }
-    )
-})
 
 let saveNewCart;
 const title = 'Заказ #1313'
-
-bot.on('pre_checkout_query', (query) => {
-    bot.answerPreCheckoutQuery(query.id, true)
-})
-bot.on('successful_payment', function (msg) {
-    bot.sendMessage(chatId, `Payment for ${msg.successful_payment.total_amount} ${msg.successful_payment.currency} received!`);
-});
 
 const PORT = 8000;
 app.listen(PORT, () => console.log('Server started on port:' + PORT));
