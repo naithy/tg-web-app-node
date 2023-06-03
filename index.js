@@ -25,6 +25,7 @@ const server = https.createServer(options, app)
 app.post('/web-data', async (req, res) => {
     const {queryID, totalPrice, cart} = req.body;
     try {
+        console.log(queryID)
         await bot.answerWebAppQuery(queryID, {
             type: 'article',
             id: queryID,
