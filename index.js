@@ -1,24 +1,24 @@
 const TelegramBot = require('node-telegram-bot-api');
-const express = require('express')
-const cors = require('cors')
+const express = require('express');
+const cors = require('cors');
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
 
+const options = {
+    cert: fs.readFileSync('./sslcert/fullchain.pem'),
+    key: fs.readFileSync('./sslcert/privkey.pem')
+};
 
 const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
-const { createProxyMiddleware } = require('http-proxy-middleware');
 
-const httpProxy = createProxyMiddleware({
-    target: 'http://77.105.172.20:8000', // адрес вашего HTTP-приложения
-    changeOrigin: true,
-    secure: false,
-});
 
 
 app.use(express.json());
 app.use(cors());
-app.use('/web-data', httpProxy)
 
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
@@ -34,5 +34,7 @@ app.post('/web-data', async (req, res) => {
 let saveNewCart;
 const title = 'Заказ #1313'
 
-const PORT = 8000;
-app.listen(PORT, () => console.log('Server started on port:' + PORT));
+const httpServer = http.createServer(app)
+httpServer.listen(8000, () => {
+    console.log("HTTP Server up and running on port 8000");
+})
