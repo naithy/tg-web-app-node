@@ -23,7 +23,7 @@ app.use(cors());
 const server = https.createServer(options, app)
 
 app.post('/web-data', async (req, res) => {
-    const {queryID, cart, totalPrice} = req.body;
+    const {queryID, totalPrice, cart} = req.body;
     try {
         await bot.answerWebAppQuery(queryID, {
             type: 'article',
