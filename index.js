@@ -36,6 +36,6 @@ app.post('/web-data', async (req, res) => {
 let saveNewCart;
 const title = 'Заказ #1313'
 
-server.listen(8443, () => {
+server.listen(443, () => {
     console.log('Server running 443 port')
 })
