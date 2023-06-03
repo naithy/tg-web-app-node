@@ -15,6 +15,7 @@ app.use(cors());
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
     try {
+        console.log('data received')
         const newCart = Object.entries(cart).reduce((acc, [key, item]) => {
             const { flavors, ...rest } = item;
             Object.keys(flavors).forEach(flavor => {
