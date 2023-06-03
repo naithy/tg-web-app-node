@@ -17,23 +17,7 @@ app.use(cors({
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
     try {
-        const newCart = Object.entries(cart).reduce((acc, [key, item]) => {
-            const { flavors, ...rest } = item;
-            Object.keys(flavors).forEach(flavor => {
-                acc.push({
-                    label: `${rest.title} ${flavor}`,
-                    amount: rest.price * 100
-                });
-            });
-            return acc;
-        }, []);
-        console.log('data received')
-        await bot.answerWebAppQuery(queryID, {
-            type: 'article',
-            id: queryID,
-            title: `${title}`,
-            input_message_content: {message_text: `Заказ успешно оформлен`}
-        })
+        console.log('fetched')
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
