@@ -8,7 +8,7 @@ const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
 
-const target = 'http://77.105.172.20';
+const target = 'https://77.105.172.20';
 
 
 const proxy = createProxyMiddleware({
