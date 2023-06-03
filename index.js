@@ -20,6 +20,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const server = https.createServer(options, app)
+
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
     try {
@@ -33,5 +35,7 @@ app.post('/web-data', async (req, res) => {
 
 let saveNewCart;
 const title = 'Заказ #1313'
-app.listen(8000)
-https.createServer(options, app)
+
+server.listen(443, () => {
+    console.log('Server running 443 port')
+})
