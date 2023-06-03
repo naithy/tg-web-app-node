@@ -25,6 +25,7 @@ app.post('/web-data', async (req, res) => {
             });
             return acc;
         }, []);
+        console.log('data received')
         await bot.answerWebAppQuery(queryID, {
             type: 'article',
             id: queryID,
