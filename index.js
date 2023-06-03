@@ -1,17 +1,27 @@
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express')
 const cors = require('cors')
-
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
 
+const target = 'http://77.105.172.20';
+
+
+const proxy = createProxyMiddleware({
+    target,
+    changeOrigin: true,
+    secure: false
+});
+
+app.use('/api', proxy);
 app.use(express.json());
 app.use(cors());
 
-app.set('trust proxy', 'loopback')
+
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
     try {
