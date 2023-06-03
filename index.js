@@ -25,7 +25,7 @@ const server = https.createServer(options, app)
 app.post('/web-data', async (req, res) => {
     const {queryID, cart} = req.body;
     try {
-        console.log('fetched')
+        console.log(queryID, cart)
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
