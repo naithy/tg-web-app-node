@@ -25,7 +25,12 @@ app.post('/web-data', async (req, res) => {
             });
             return acc;
         }, []);
-        await bot.answerWebAppQuery(queryID, newCart)
+        await bot.answerWebAppQuery(queryID, {
+            type: 'article',
+            id: queryID,
+            title: `${title}`,
+            input_message_content: {message_text: `Заказ успешно оформлен`}
+        })
     } catch (e) {
         console.log('error')
     }
