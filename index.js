@@ -12,6 +12,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const httpProxy = createProxyMiddleware({
     target: 'http://77.105.172.20:8000', // адрес вашего HTTP-приложения
     changeOrigin: true,
+    secure: false,
 });
 
 
