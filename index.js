@@ -46,7 +46,7 @@ app.post('/web-data', async (req, res) => {
                     return `\n*${value.title}* ${flavors}`;
                 })
                 .join("\n")
-        }\nСумма: *${totalPrice} руб.*`, {parse_mode: 'MarkdownV2'})
+        }\nСумма: *${totalPrice} руб.*`, {parse_mode: 'markdown'})
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
