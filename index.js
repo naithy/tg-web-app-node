@@ -10,6 +10,7 @@ const options = {
 };
 
 const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
+const webAppUrl = 'https://sakurashop.netlify.app';
 
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
@@ -36,7 +37,6 @@ app.post('/web-data', async (req, res) => {
                 message_text: `Поздравляю с покупкой, вы приобрели товар на сумму ${totalPrice}`
             }
         })
-        console.log(cart)
         await bot.sendMessage(5212881326, `Клиент *${user.first_name} ${user?.last_name}* ${user.username ? '@' + user.username : ''}\nCписок товаров: ${
             Object.values(cart)
                 .map((value, ) => {
@@ -50,7 +50,7 @@ app.post('/web-data', async (req, res) => {
             {parse_mode: 'markdown',
                 reply_markup: {
                 inline_keyboard: [
-                    [{text: 'Завершить'}, {text: 'Отменить'}]
+                    [{text: 'Завершить', web_app: {url: webAppUrl}}, {text: 'Отменить', web_app: {url: webAppUrl}}]
                 ]
                 }
 
