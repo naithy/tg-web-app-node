@@ -47,8 +47,7 @@ app.post('/web-data', async (req, res) => {
                     return `${parseInt(key) + 1}) ${value.title} •${flavors}`;
                 })
                 .join("\n")
-        },
-        Сумма: ${totalPrice}`)
+        }\nСумма: ${totalPrice}`)
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
