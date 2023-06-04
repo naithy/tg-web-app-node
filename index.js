@@ -17,9 +17,18 @@ const app = express();
 
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
-    console.log(chatId)
     })
 
+bot.on("callback_query", (query) => {
+    console.log(queryChatId)
+    const queryChatId = query.message.chat.id;
+    const messageId = query.message.message_id;
+    // Если была нажата нужная клавиша
+    if (query.data === "delete") {
+        // Удаляем сообщение
+        bot.deleteMessage(queryChatId, messageId);
+    }
+});
 
 app.use(express.json());
 app.use(cors());
@@ -50,7 +59,7 @@ app.post('/web-data', async (req, res) => {
             {parse_mode: 'markdown',
                 reply_markup: {
                 inline_keyboard: [
-                    [{text: 'Завершить', web_app: {url: webAppUrl}}, {text: 'Отменить', web_app: {url: webAppUrl}}]
+                    [{text: 'Завершить', web_app: {url: webAppUrl}}, {text: 'Отменить',  callback_data: "delete"}]
                 ]
                 }
 
