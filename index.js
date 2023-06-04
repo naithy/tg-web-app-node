@@ -41,8 +41,8 @@ app.post('/web-data', async (req, res) => {
             Object.entries(cart)
                 .map(([key, value]) => {
                     const flavors = Object.entries(value.flavors)
-                        .map(([flavor, quantity]) => ` • ${flavor} - ${quantity}`)
-                        .join("");
+                        .map(([flavor, quantity]) => `${flavor} - ${quantity}`)
+                        .join("\n");
                     return `${parseInt(key) + 1}) ${value.title} •${flavors}`;
                 })
                 .join("\n")
