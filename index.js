@@ -22,10 +22,7 @@ bot.on('message', async (msg) => {
 bot.on("callback_query", (query) => {
     const queryChatId = query.message.chat.id;
     const messageId = query.message.message_id;
-    console.log(queryChatId)
-    // Если была нажата нужная клавиша
     if (query.data === "delete") {
-        // Удаляем сообщение
         bot.deleteMessage(queryChatId, messageId);
     }
 });
@@ -59,7 +56,7 @@ app.post('/web-data', async (req, res) => {
             {parse_mode: 'markdown',
                 reply_markup: {
                 inline_keyboard: [
-                    [{text: 'Завершить', web_app: {url: webAppUrl}}, {text: 'Отменить',  callback_data: "delete"}]
+                    [{text: 'Удалить',  callback_data: "delete"}]
                 ]
                 }
 
@@ -70,9 +67,6 @@ app.post('/web-data', async (req, res) => {
         return res.status(500).json({})
     }
 })
-
-let saveNewCart;
-const title = 'Заказ #1313'
 
 server.listen(443, () => {
     console.log('Server running 443 port')
