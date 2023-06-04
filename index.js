@@ -43,7 +43,7 @@ app.post('/web-data', async (req, res) => {
                     const flavors = Object.entries(value.flavors)
                         .map(([flavor, quantity]) => `\n• ${flavor} - ${quantity}`)
                         .join("");
-                    return `${parseInt(key) + 1}) \n${value.title} ${flavors}`;
+                    return `\n${parseInt(key) + 1}) ${value.title} ${flavors}`;
                 })
                 .join("\n")
         }\nСумма: ${totalPrice}`)
