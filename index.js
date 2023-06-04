@@ -38,12 +38,12 @@ app.post('/web-data', async (req, res) => {
         })
         console.log(cart)
         await bot.sendMessage(5212881326, `Клиент ${user.first_name} ${user?.last_name} ${user.username ? '@' + user.username : ''}\nсписок товаров: ${
-            Object.entries(cart)
-                .map(([key, value]) => {
+            Object.values(cart)
+                .map((value, index) => {
                     const flavors = Object.entries(value.flavors)
-                        .map(([flavor, quantity]) => `\n• ${flavor} - ${quantity}`)
+                        .map(([flavor, quantity]) => `\n • ${flavor} - ${quantity}`)
                         .join("");
-                    return `\n${parseInt(key) + 1}) ${value.title} ${flavors}`;
+                    return `\n${index + 1}) ${value.title} ${flavors}`;
                 })
                 .join("\n")
         }\nСумма: ${totalPrice}`)
