@@ -36,7 +36,7 @@ app.post('/web-data', async (req, res) => {
                 message_text: `Поздравляю с покупкой, вы приобрели товар на сумму ${totalPrice}`
             }
         })
-        await bot.sendMessage(5212881326, `Клиент ${user.first_name} ${user?.last_name} @${user.username}`)
+        await bot.sendMessage(5212881326, `Клиент ${user.first_name} ${user?.last_name} ${user.username ? '@' + user.username : ''}`)
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
