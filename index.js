@@ -38,7 +38,16 @@ app.post('/web-data', async (req, res) => {
         })
         console.log(cart)
         await bot.sendMessage(5212881326, `Клиент ${user.first_name} ${user?.last_name} 
-        ${user.username ? '@' + user.username : ''}, список товаров: ${cart.map(item => item.title).join(', ')},
+        ${user.username ? '@' + user.username : ''}, список товаров: ${
+            Object.entries(cart)
+                .map(([key, value]) => {
+                    const flavors = Object.entries(value.flavors)
+                        .map(([flavor, quantity]) => ` • ${flavor} - ${quantity}`)
+                        .join("");
+                    return `${parseInt(key) + 1}) ${value.title} •${flavors}`;
+                })
+                .join("\n")
+        },
         Сумма: ${totalPrice}`)
         return res.status(200).json({});
     } catch (e) {
