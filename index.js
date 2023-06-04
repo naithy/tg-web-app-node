@@ -37,7 +37,7 @@ app.post('/web-data', async (req, res) => {
             }
         })
         console.log(cart)
-        await bot.sendMessage(5212881326, `Клиент ${user.first_name} ${user?.last_name} ${user.username ? '@' + user.username : ''}\nCписок товаров: ${
+        await bot.sendMessage(5212881326, `Клиент **${user.first_name} ${user?.last_name}** ${user.username ? '@' + user.username : ''}\nCписок товаров: ${
             Object.values(cart)
                 .map((value, ) => {
                     const flavors = Object.entries(value.flavors)
