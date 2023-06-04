@@ -20,9 +20,9 @@ bot.on('message', async (msg) => {
     })
 
 bot.on("callback_query", (query) => {
-    console.log(queryChatId)
     const queryChatId = query.message.chat.id;
     const messageId = query.message.message_id;
+    console.log(queryChatId)
     // Если была нажата нужная клавиша
     if (query.data === "delete") {
         // Удаляем сообщение
