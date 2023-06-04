@@ -41,7 +41,7 @@ app.post('/web-data', async (req, res) => {
             Object.values(cart)
                 .map((value, ) => {
                     const flavors = Object.entries(value.flavors)
-                        .map(([flavor, quantity]) => `\n    *• ${flavor} - ${quantity}_`)
+                        .map(([flavor, quantity]) => `\n    _• ${flavor} - ${quantity}_`)
                         .join("");
                     return `\n*${value.title}* ${flavors}`;
                 })
