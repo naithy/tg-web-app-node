@@ -2,7 +2,6 @@ const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
-const http = require('http');
 const fs = require('fs');
 
 const options = {
@@ -15,6 +14,10 @@ const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
 
+bot.on('message', async (msg) => {
+    const chatId = msg.chat.id;
+    console.log(chatId)
+    })
 
 
 app.use(express.json());
@@ -23,7 +26,7 @@ app.use(cors());
 const server = https.createServer(options, app)
 
 app.post('/web-data', async (req, res) => {
-    const {queryId, totalPrice, cart} = req.body;
+    const {queryId, user, totalPrice, cart} = req.body;
     try {
         console.log(queryId)
         await bot.answerWebAppQuery(queryId, {
@@ -34,6 +37,7 @@ app.post('/web-data', async (req, res) => {
                 message_text: `Поздравляю с покупкой, вы приобрели товар на сумму ${totalPrice}`
             }
         })
+        await bot.sendMessage(5212881326, `Клиент ${user}`)
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
