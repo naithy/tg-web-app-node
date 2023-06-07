@@ -78,7 +78,7 @@ app.post('/web-data', async (req, res) => {
             if (cart.hasOwnProperty(key)) {
                 try {
                     const customer = new Customer({
-                        user: user,
+                        // user: user,
                         // chat_id: chat,
                         title: cart[key].title,
                         price: cart[key].price,
