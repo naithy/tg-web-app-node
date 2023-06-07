@@ -88,7 +88,7 @@ app.post('/web-data', async (req, res) => {
                 }   catch (e) {
                     console.log(e)
                 }
-                console.log(chat)
+                console.log(user)
 
             }
         }
