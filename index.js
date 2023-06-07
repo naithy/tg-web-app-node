@@ -74,23 +74,15 @@ app.post('/web-data', async (req, res) => {
 
             })
 
-        for (const key in cart) {
-            if (cart.hasOwnProperty(key)) {
-                try {
-                    const customer = new Customer({
-                        first_name: user.first_name,
-                        chat_id: user.id,
-                        username: user?.username,
-                        title: cart[key].title,
-                        price: cart[key].price,
-                        flavors: cart[key].flavors
-                    });
-                    customer.save().then(() => console.log('User saved'))
-                }   catch (e) {
-                    console.log(e)
-                }
-            }
-        }
+        const customer = new Customer({
+            first_name: user.first_name,
+            chat_id: user.id,
+            username: user?.username,
+            cart: cart,
+            totalPrice: totalPrice,
+
+        });
+        customer.save().then(() => console.log('User saved'))
 
         return res.status(200).json({});
     } catch (e) {

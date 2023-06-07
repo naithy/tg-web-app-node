@@ -8,7 +8,7 @@ const CustomerSchema = new mongoose.Schema({
     chat_id: Number,
     username: String,
     title: String,
-    price: Number,
+    totalPrice: Number,
     flavors: Object
 });
 module.exports = mongoose.model('Customer', CustomerSchema);
