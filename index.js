@@ -55,7 +55,7 @@ app.post('/web-data', async (req, res) => {
         //         message_text: `Поздравляю с покупкой, вы приобрели товар на сумму ${totalPrice}`
         //     }
         // })
-        await bot.sendMessage(5212881326, `\nCписок товаров: ${
+        await bot.sendMessage(user.id, `\nЗаказ: ${
             Object.values(cart)
                 .map((value, ) => {
                     const flavors = Object.entries(value.flavors)
