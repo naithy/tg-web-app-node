@@ -79,7 +79,6 @@ app.post('/web-data', async (req, res) => {
             const queryChatId = query.message.chat.id;
             const messageId = query.message.message_id;
             if (query.data === "accept") {
-                bot.deleteMessage(queryChatId, messageId);
                 customer.save().then(() => bot.deleteMessage(queryChatId, messageId))
             }
             if (query.data === "delete") {
