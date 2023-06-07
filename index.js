@@ -82,6 +82,9 @@ app.post('/web-data', async (req, res) => {
                 bot.deleteMessage(queryChatId, messageId);
                 customer.save().then(() => console.log('User saved'))
             }
+            if (query.data === "delete") {
+                bot.deleteMessage(queryChatId, messageId);
+            }
         });
 
 
