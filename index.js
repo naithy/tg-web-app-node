@@ -35,14 +35,6 @@ bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     })
 
-bot.on("callback_query", (query) => {
-    const queryChatId = query.message.chat.id;
-    const messageId = query.message.message_id;
-    if (query.data === "delete") {
-
-        bot.deleteMessage(queryChatId, messageId);
-    }
-});
 
 app.post('/web-data', async (req, res) => {
     const {queryId, user, totalPrice, cart, chat} = req.body;
@@ -68,7 +60,7 @@ app.post('/web-data', async (req, res) => {
             {parse_mode: 'markdown',
                 reply_markup: {
                 inline_keyboard: [
-                    [{text: 'Подтвердить', callback_data: "delete"}, {text: 'Отменить',  callback_data: "delete"}]
+                    [{text: 'Подтвердить', callback_data: "accept"}, {text: 'Отменить',  callback_data: "delete"}]
                 ]
                 }
 
@@ -82,7 +74,16 @@ app.post('/web-data', async (req, res) => {
             totalPrice: totalPrice,
 
         });
-        customer.save().then(() => console.log('User saved'))
+
+        bot.on("callback_query", (query) => {
+            const queryChatId = query.message.chat.id;
+            const messageId = query.message.message_id;
+            if (query.data === "accept") {
+                bot.deleteMessage(queryChatId, messageId);
+                customer.save().then(() => console.log('User saved'))
+            }
+        });
+
 
         return res.status(200).json({});
     } catch (e) {
