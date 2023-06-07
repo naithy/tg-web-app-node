@@ -78,8 +78,9 @@ app.post('/web-data', async (req, res) => {
             if (cart.hasOwnProperty(key)) {
                 try {
                     const customer = new Customer({
-                        // user: user,
-                        // chat_id: chat,
+                        first_name: user.first_name,
+                        chat_id: user.id,
+                        username: user?.username,
                         title: cart[key].title,
                         price: cart[key].price,
                         flavors: cart[key].flavors
@@ -88,8 +89,6 @@ app.post('/web-data', async (req, res) => {
                 }   catch (e) {
                     console.log(e)
                 }
-                console.log(user)
-
             }
         }
 
