@@ -40,7 +40,10 @@ bot.on("callback_query", (query) => {
     const messageId = query.message.message_id;
     if (query.data === "delete") {
         bot.deleteMessage(queryChatId, messageId);
-        console.log(query)
+    }
+    if (query.data === "accept")
+    {
+        bot.deleteMessage(queryChatId, messageId);
     }
 });
 
@@ -82,6 +85,7 @@ app.post('/web-data', async (req, res) => {
             totalPrice: totalPrice,
 
         });
+        console.log(user)
         customer.save().then(() => console.log('User saved'))
 
         return res.status(200).json({});
