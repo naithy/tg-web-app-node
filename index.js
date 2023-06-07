@@ -79,7 +79,7 @@ app.post('/web-data', async (req, res) => {
                 try {
                     const customer = new Customer({
                         user: user,
-                        chat_id: chat,
+                        // chat_id: chat,
                         title: cart[key].title,
                         price: cart[key].price,
                         flavors: cart[key].flavors
@@ -88,7 +88,7 @@ app.post('/web-data', async (req, res) => {
                 }   catch (e) {
                     console.log(e)
                 }
-
+                console.log(chat)
 
             }
         }

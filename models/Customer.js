@@ -5,7 +5,7 @@ const {Schema, model} = require('mongoose')
 
 const CustomerSchema = new mongoose.Schema({
     user: String,
-    chat_id: Number,
+    // chat_id: Number,
     title: String,
     price: Number,
     flavors: Object
