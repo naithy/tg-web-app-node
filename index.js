@@ -35,6 +35,14 @@ bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     })
 
+bot.on("callback_query", (query) => {
+    const queryChatId = query.message.chat.id;
+    const messageId = query.message.message_id;
+    if (query.data === "delete") {
+        bot.deleteMessage(queryChatId, messageId);
+        console.log(query.data)
+    }
+});
 
 app.post('/web-data', async (req, res) => {
     const {queryId, user, totalPrice, cart, chat} = req.body;
@@ -74,18 +82,7 @@ app.post('/web-data', async (req, res) => {
             totalPrice: totalPrice,
 
         });
-
-        bot.on("callback_query", async (query) => {
-            const queryChatId = await query.message.chat.id;
-            const messageId = await query.message.message_id;
-            if (query.data === "accept") {
-                customer.save().then(() => bot.deleteMessage(queryChatId, messageId))
-            }
-            if (query.data === "delete") {
-                await bot.deleteMessage(queryChatId, messageId);
-            }
-        });
-
+        customer.save().then(() => console.log('User saved'))
 
         return res.status(200).json({});
     } catch (e) {
