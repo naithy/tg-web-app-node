@@ -40,7 +40,7 @@ bot.on("callback_query", (query) => {
     const messageId = query.message.message_id;
     if (query.data === "delete") {
         bot.deleteMessage(queryChatId, messageId);
-        console.log(query.data)
+        console.log(query)
     }
 });
 
