@@ -9,6 +9,6 @@ const CustomerSchema = new mongoose.Schema({
     username: String,
     title: String,
     totalPrice: Number,
-    flavors: Object
+    flavors: Map
 });
 module.exports = mongoose.model('Customer', CustomerSchema);
