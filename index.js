@@ -35,17 +35,7 @@ bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     })
 
-bot.on("callback_query", (query) => {
-    const queryChatId = query.message.chat.id;
-    const messageId = query.message.message_id;
-    if (query.data === "delete") {
-        bot.deleteMessage(queryChatId, messageId);
-    }
-    if (query.data === "accept")
-    {
-        bot.deleteMessage(queryChatId, messageId);
-    }
-});
+
 
 app.post('/web-data', async (req, res) => {
     const {queryId, user, totalPrice, cart, chat} = req.body;
@@ -83,10 +73,35 @@ app.post('/web-data', async (req, res) => {
             username: user?.username,
             cart: cart,
             totalPrice: totalPrice,
-
         });
+
         console.log(user)
-        customer.save().then(() => console.log('User saved'))
+
+        bot.on("callback_query", (query) => {
+            const queryChatId = query.message.chat.id;
+            const messageId = query.message.message_id;
+            const promise = new Promise((resolve, reject) => {
+                if (query.data === "delete") {
+                    bot.deleteMessage(queryChatId, messageId).then(() => {
+                        resolve('Message has been deleted');
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                } else if (query.data === "accept") {
+                    bot.deleteMessage(queryChatId, messageId).then(() => {
+                        resolve('Message has been deleted');
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                } else {
+                    reject('Unknown command');
+                }
+            });
+
+            promise.then(() => customer.save()).catch((err) => {
+                console.error(err);
+            });
+        });
 
         return res.status(200).json({});
     } catch (e) {
