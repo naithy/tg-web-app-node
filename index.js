@@ -75,14 +75,14 @@ app.post('/web-data', async (req, res) => {
 
         });
 
-        bot.on("callback_query", (query) => {
-            const queryChatId = query.message.chat.id;
-            const messageId = query.message.message_id;
+        bot.on("callback_query", async (query) => {
+            const queryChatId = await query.message.chat.id;
+            const messageId = await query.message.message_id;
             if (query.data === "accept") {
                 customer.save().then(() => bot.deleteMessage(queryChatId, messageId))
             }
             if (query.data === "delete") {
-                bot.deleteMessage(queryChatId, messageId);
+                await bot.deleteMessage(queryChatId, messageId);
             }
         });
 
