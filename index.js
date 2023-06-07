@@ -80,7 +80,7 @@ app.post('/web-data', async (req, res) => {
             const messageId = query.message.message_id;
             if (query.data === "accept") {
                 bot.deleteMessage(queryChatId, messageId);
-                customer.save().then(() => console.log('User saved'))
+                customer.save().then(() => bot.deleteMessage(queryChatId, messageId))
             }
             if (query.data === "delete") {
                 bot.deleteMessage(queryChatId, messageId);
