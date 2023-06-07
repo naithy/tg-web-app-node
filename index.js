@@ -7,8 +7,8 @@ const mongoose = require('mongoose');
 const Customer = require('./models/Customer')
 
 const options = {
-    // cert: fs.readFileSync('fullchain.pem'),
-    // key: fs.readFileSync('privkey.pem')
+    cert: fs.readFileSync('fullchain.pem'),
+    key: fs.readFileSync('privkey.pem')
 };
 
 const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
@@ -23,7 +23,7 @@ app.use(cors());
 const start = async () => {
     try {
         await mongoose.connect('mongodb://94.198.217.174:27017/test', {useNewUrlParser: true})
-        app.listen(443, () => {
+        server.listen(443, () => {
             console.log('Server running 443 port')
         })
     } catch (e) {
