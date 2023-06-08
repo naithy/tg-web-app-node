@@ -40,33 +40,6 @@ bot.on('message', async (msg) => {
 app.post('/web-data', async (req, res) => {
     const {queryId, user, totalPrice, cart, chat} = req.body;
     try {
-        // await bot.answerWebAppQuery(queryId, {
-        //     type: 'article',
-        //     id: queryId,
-        //     title: 'Успешная покупка',
-        //     input_message_content: {
-        //         message_text: `Поздравляю с покупкой, вы приобрели товар на сумму ${totalPrice}`
-        //     }
-        // })
-        await bot.sendMessage(user.id, `\nЗаказ: ${
-            Object.values(cart)
-                .map((value, ) => {
-                    const flavors = Object.entries(value.flavors)
-                        .map(([flavor, quantity]) => `\n    _• ${flavor} - ${quantity}_`)
-                        .join("");
-                    return `\n*${value.title}* ${flavors}`;
-                })
-                .join("\n")
-        }\nСумма: *${totalPrice} руб.*`,
-            {parse_mode: 'markdown',
-                reply_markup: {
-                inline_keyboard: [
-                    [{text: 'Подтвердить', callback_data: "accept"}, {text: 'Отменить',  callback_data: "delete"}]
-                ]
-                }
-
-            })
-
         const customer = new Customer({
             first_name: user.first_name,
             chat_id: user.id,
@@ -75,34 +48,7 @@ app.post('/web-data', async (req, res) => {
             totalPrice: totalPrice,
         });
 
-        console.log(user)
-
-        bot.on("callback_query", (query) => {
-            const queryChatId = query.message.chat.id;
-            const messageId = query.message.message_id;
-            const promise = new Promise((resolve, reject) => {
-                if (query.data === "delete") {
-                    bot.deleteMessage(queryChatId, messageId).then(() => {
-                        resolve('Message has been deleted');
-                    }).catch((err) => {
-                        reject(err);
-                    });
-                } else if (query.data === "accept") {
-                    bot.deleteMessage(queryChatId, messageId).then(() => {
-                        resolve('Message has been deleted');
-                    }).catch((err) => {
-                        reject(err);
-                    });
-                } else {
-                    reject('Unknown command');
-                }
-            });
-
-            promise.then(() => customer.save()).catch((err) => {
-                console.error(err);
-            });
-        });
-
+        customer.save()
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
