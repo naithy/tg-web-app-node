@@ -5,7 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
-const socket_io = require('socket.io');
+const socketIo = require('socket.io')
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
@@ -16,10 +16,36 @@ const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
+
+app.use(
+    cors({
+        origin: ALLOWED_ORIGIN
+    })
+)
+app.use(express.json())
+
 const server = https.createServer(options, app)
 
-app.use(express.json());
-app.use(cors());
+const io = socketIo(server, {
+    cors: {
+        origin: 'https://sakurashopsmr.ru:8080'
+    }
+})
+
+io.on('connection',(socket)=>{
+    console.log('client connected: ', socket.id)
+
+    socket.join('clock-room')
+
+    socket.on('disconnect', (reason)=> {
+        console.log(reason)
+    })
+})
+
+setInterval(()=>{
+    io.to('clock-room').emit('time', new Date())
+},1000)
+
 
 const start = async () => {
     try {
@@ -50,6 +76,7 @@ app.post('/web-data', async (req, res) => {
             number: number,
         });
         customer.save()
+
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
@@ -67,17 +94,5 @@ app.get('/web-data', async (req, res) => {
     }
 });
 
-const changeStream = Customer.watch();
-
-changeStream.on('change', (change) => {
-    console.log(change);
-    io.emit('changeData', change);
-});
-
-io.on('connection', function () {
-    console.log('connected');
-});
-
-let socket = io;
 
 start()
