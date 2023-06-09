@@ -28,21 +28,6 @@ const io = socketIo(server, {
     }
 })
 
-io.on('connection',(socket)=>{
-    console.log('client connected: ', socket.id)
-
-    socket.join('clock-room')
-
-    socket.on('disconnect', (reason)=> {
-        console.log(reason)
-    })
-})
-
-setInterval(()=>{
-    io.to('clock-room').emit('time', new Date())
-},1000)
-
-
 const start = async () => {
     try {
         await mongoose.connect('mongodb://94.198.217.174:27017/test', {useNewUrlParser: true})
@@ -53,6 +38,31 @@ const start = async () => {
         console.log(e)
     }
 }
+
+io.on('connection',(socket)=>{
+    console.log('client connected: ', socket.id)
+
+    socket.join('clock-room')
+
+    socket.on('disconnect', (reason)=> {
+        console.log(reason)
+    })
+})
+
+const db = mongoose.connection;
+db.once('open', () => {
+    const collection = db.collection('web-data');
+    const changeStream = collection.watch();
+
+    // обработка изменений
+    changeStream.on('change', (change) => {
+        console.log('Change:', change);
+    });
+});
+setInterval(()=>{
+    io.to('clock-room').emit('time', new Date())
+},1000)
+
 
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
