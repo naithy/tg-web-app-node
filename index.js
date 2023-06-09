@@ -46,11 +46,8 @@ app.post('/web-data', async (req, res) => {
             username: user?.username,
             cart: cart,
             totalPrice: totalPrice,
-            birthday: birthday,
-            number: number,
         });
-
-        customer.save().then()
+        customer.save()
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
