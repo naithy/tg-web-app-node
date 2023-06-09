@@ -55,7 +55,17 @@ app.post('/web-data', async (req, res) => {
         console.log('error')
         return res.status(500).json({})
     }
-})
+});
+
+app.get('/web-data', async (req, res) => {
+    try {
+        const data = await Customer.find();
+        res.json(data); // отправляем данные в формате JSON
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+});
 
 
 start()
