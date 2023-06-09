@@ -19,7 +19,7 @@ const app = express();
 
 app.use(
     cors({
-        origin: ALLOWED_ORIGIN
+        origin: 'https://localhost:3000'
     })
 )
 app.use(express.json())
