@@ -24,7 +24,7 @@ const server = https.createServer(options, app)
 
 const io = socketIo(server, {
     cors: {
-        origin: 'https://sakurashopsmr.ru:8080'
+        origin: 'http://localhost:3000'
     }
 })
 
