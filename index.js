@@ -5,6 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer')
+const socketIO = require('socket.io');
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
@@ -16,6 +17,7 @@ const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
 const server = https.createServer(options, app)
+const io = socketIO(server);
 
 app.use(express.json());
 app.use(cors());
@@ -65,6 +67,10 @@ app.get('/web-data', async (req, res) => {
         console.error(error);
         res.status(500).send(error.message);
     }
+});
+
+Customer.watch().on('change', (data) => {
+    io.emit('new-doc', data.fullDocument);
 });
 
 
