@@ -9,6 +9,6 @@ const CustomerSchema = new mongoose.Schema({
     username: String,
     totalPrice: Number,
     cart: Object,
-    number: Number
+    number: String
 }, { timestamps: true });
 module.exports = mongoose.model('Customer', CustomerSchema);
