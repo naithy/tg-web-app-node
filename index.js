@@ -46,7 +46,6 @@ app.post('/web-data', async (req, res) => {
             username: user?.username,
             cart: cart,
             totalPrice: totalPrice,
-            birthday: birthday,
             number: number,
         });
         customer.save()
