@@ -36,30 +36,6 @@ bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     })
 
-wss.on('connection', (ws) => {
-    const wsSend = (data) => {
-        if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify(data))
-        }
-    }
-})
-
-const sendMessages = (err, messages) => {
-    if (err) {
-        console.error(err);
-    } else {
-        wsSend(messages);
-    }
-};
-
-const changeStream = Customer.watch();
-
-changeStream.on('change', (change) => {
-    if (change.operationType === 'insert') {
-        wsSend(change.fullDocument);
-    }
-});
-
 
 app.post('/web-data', async (req, res) => {
     const {user, totalPrice, cart, birthday, number} = req.body;
