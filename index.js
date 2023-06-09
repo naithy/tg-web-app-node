@@ -17,11 +17,7 @@ const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
 
-app.use(
-    cors({
-        origin: 'https://localhost:3000'
-    })
-)
+app.use(cors())
 app.use(express.json())
 
 const server = https.createServer(options, app)
