@@ -5,6 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer')
+const socketio = require('socket.io');
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
@@ -16,6 +17,8 @@ const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
 const server = https.createServer(options, app)
+
+const io = socketio(server);
 
 app.use(express.json());
 app.use(cors());
@@ -60,11 +63,39 @@ app.post('/web-data', async (req, res) => {
 app.get('/web-data', async (req, res) => {
     try {
         const data = await Customer.find();
-        res.json(data); // отправляем данные в формате JSON
+        socket.emit('data', data);
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);
     }
+});
+
+const sendData = async (socket) => {
+    const data = await Customer.find();
+    socket.emit('data', data);
+};
+
+// Подписка на событие подключения нового клиента
+io.on('connection', async (socket) => {
+    console.log('Client connected');
+
+    // Отправляем данные только подключенному клиенту
+    sendData(socket);
+
+    // Подписка на событие обновления данных в базе данных
+    const changeStream = Customer.watch();
+    changeStream.on('change', () => {
+        console.log('Data updated');
+        // Отправляем данные только подключенному клиенту
+        if (socket.connected) {
+            sendData(socket);
+        }
+    });
+
+    // Подписка на событие отключения клиента
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
 });
 
 
