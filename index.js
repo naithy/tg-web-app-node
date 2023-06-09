@@ -63,7 +63,7 @@ app.post('/web-data', async (req, res) => {
 app.get('/web-data', async (req, res) => {
     try {
         const data = await Customer.find();
-        socket.emit('data', data);
+        socket.emit('data', JSON.stringify(data));
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);
@@ -72,7 +72,7 @@ app.get('/web-data', async (req, res) => {
 
 const sendData = async (socket) => {
     const data = await Customer.find();
-    socket.emit('data', data);
+    socket.emit('data', JSON.stringify(data));
 };
 
 // Подписка на событие подключения нового клиента
