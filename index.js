@@ -71,8 +71,14 @@ app.get('/web-data', async (req, res) => {
 });
 
 const sendData = async (socket) => {
-    const data = await Customer.find();
-    socket.emit('data', JSON.stringify(data));
+    try {
+        const data = await Customer.find();
+        socket.emit('data', JSON.stringify(data));
+    } catch (error) {
+        console.log('error')
+        socket.emit('error', error.message)
+    }
+
 };
 
 // Подписка на событие подключения нового клиента
