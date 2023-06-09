@@ -38,7 +38,7 @@ bot.on('message', async (msg) => {
 
 
 app.post('/web-data', async (req, res) => {
-    const {queryId, user, totalPrice, cart, chat} = req.body;
+    const {user, totalPrice, cart, birthday, number} = req.body;
     try {
         const customer = new Customer({
             first_name: user.first_name,
@@ -46,6 +46,8 @@ app.post('/web-data', async (req, res) => {
             username: user?.username,
             cart: cart,
             totalPrice: totalPrice,
+            birthday: birthday,
+            number: number,
         });
 
         customer.save()

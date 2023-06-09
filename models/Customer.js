@@ -8,6 +8,8 @@ const CustomerSchema = new mongoose.Schema({
     chat_id: Number,
     username: String,
     totalPrice: Number,
-    cart: Object
+    cart: Object,
+    birthday: String,
+    number: String
 }, { timestamps: true });
 module.exports = mongoose.model('Customer', CustomerSchema);
