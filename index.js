@@ -53,7 +53,7 @@ const sendMessages = (err, messages) => {
     }
 };
 
-Customer.find({}, sendMessages);
+Message.find({}, sendMessages);
 
 const changeStream = Customer.watch();
 
