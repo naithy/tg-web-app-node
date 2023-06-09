@@ -50,7 +50,7 @@ app.post('/web-data', async (req, res) => {
             number: number,
         });
 
-        customer.save()
+        customer.save().then()
         return res.status(200).json({});
     } catch (e) {
         console.log('error')
