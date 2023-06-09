@@ -5,7 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer')
-const socketIO = require('socket.io');
+const WebSocket = require('ws')
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
@@ -17,7 +17,7 @@ const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
 const server = https.createServer(options, app)
-const io = socketIO(server);
+const wss = new WebSocket.Server({port: 8080})
 
 app.use(express.json());
 app.use(cors());
@@ -37,6 +37,31 @@ bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     })
 
+wss.on('connection', (ws) => {
+    const wsSend = (data) => {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify(data))
+        }
+    }
+})
+
+const sendMessages = (err, messages) => {
+    if (err) {
+        console.error(err);
+    } else {
+        wsSend(messages);
+    }
+};
+
+Customer.find({}, sendMessages);
+
+const changeStream = Customer.watch();
+
+changeStream.on('change', (change) => {
+    if (change.operationType === 'insert') {
+        wsSend(change.fullDocument);
+    }
+});
 
 
 app.post('/web-data', async (req, res) => {
@@ -67,22 +92,6 @@ app.get('/web-data', async (req, res) => {
         console.error(error);
         res.status(500).send(error.message);
     }
-});
-
-io.on('connection', (socket) => {
-    console.log('Socket connected: ', socket);
-
-    // Подписка на событие добавления новой записи в базу данных
-    socket.on('newRecord', (record) => {
-        console.log('New record: ', record);
-
-        // Отправить новую запись во все соединенные клиенты
-        io.emit('newRecord', record);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Socket disconnected: ', socket);
-    });
 });
 
 start()
