@@ -17,7 +17,6 @@ const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
 const server = https.createServer(options, app)
-const wss = new WebSocket.Server({port: 8080})
 
 app.use(express.json());
 app.use(cors());
@@ -91,5 +90,23 @@ app.get('/web-data', async (req, res) => {
         res.status(500).send(error.message);
     }
 });
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+// Listen for new messages on the message stream
+const messageStream = Customer.watch();
+
+messageStream.on('change', (change) => {
+    if (change.operationType === 'insert') {
+        const message = change.fullDocument;
+
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify(message));
+            }
+        });
+    }
+});
+
 
 start()
