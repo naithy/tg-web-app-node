@@ -4,8 +4,8 @@ const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 const mongoose = require('mongoose');
-const Customer = require('./models/Customer')
-const WebSocket = require('ws')
+const Customer = require('./models/Customer');
+const socket_io = require('socket.io');
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
@@ -67,22 +67,17 @@ app.get('/web-data', async (req, res) => {
     }
 });
 
-const wss = new WebSocket.Server({ port: 8080 });
+const changeStream = Customer.watch();
 
-// Listen for new messages on the message stream
-const messageStream = Customer.watch();
-
-messageStream.on('change', (change) => {
-    if (change.operationType === 'insert') {
-        const message = change.fullDocument;
-
-        wss.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(JSON.stringify(message));
-            }
-        });
-    }
+changeStream.on('change', (change) => {
+    console.log(change);
+    io.emit('changeData', change);
 });
 
+io.on('connection', function () {
+    console.log('connected');
+});
+
+let socket = io;
 
 start()
