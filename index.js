@@ -69,9 +69,20 @@ app.get('/web-data', async (req, res) => {
     }
 });
 
-Customer.watch().on('change', (data) => {
-    io.emit('new-doc', data.fullDocument);
-});
+io.on('connection', (socket) => {
+    console.log('Socket connected: ', socket);
 
+    // Подписка на событие добавления новой записи в базу данных
+    socket.on('newRecord', (record) => {
+        console.log('New record: ', record);
+
+        // Отправить новую запись во все соединенные клиенты
+        io.emit('newRecord', record);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Socket disconnected: ', socket);
+    });
+});
 
 start()
