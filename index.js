@@ -69,7 +69,7 @@ io.on('connection', function () {
                 createdAt: change.fullDocument.createdAt,
             }]
             if (!sentItems.some(item => item._id.equals(change.fullDocument._id))) {
-                sentItems.push(customer);
+                sentItems.push(change.fullDocument);
                 io.emit('item', customer);
             } else {
                 Customer.find({}, (err, items) => {
