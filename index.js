@@ -83,7 +83,7 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.join("customers");
+    socket.join("customerss");
 });
 
 
