@@ -6,8 +6,6 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
 const socketIo = require('socket.io')
-const { Transform } = require('stream')
-
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
@@ -44,6 +42,18 @@ const start = async () => {
     }
 }
 
+
+const changeStream = Customer.watch()
+changeStream.on('change', (change) => {
+    console.log(change); // You could parse out the needed info and send only that data.
+    io.emit('changeData', change);
+});
+
+io.on('connection', function () {
+    console.log('connected');
+});
+
+
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     })
@@ -71,34 +81,13 @@ app.post('/web-data', async (req, res) => {
 });
 
 app.get('/web-data', async (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-
-    const transformData = new Transform({objectMode: true})
-    transformData.isWritten = false;
-
-    transformData._transform = function (chunk, encoding, callback) {
-        if (!this.isWritten) {
-            this.isWritten = true
-            callback(null, '[' + JSON.stringify(chunk))
-        } else {
-            callback(null, ',' + JSON.stringify((chunk)))
-        }
+    try {
+        const data = await Customer.find();
+        res.json(data); // отправляем данные в формате JSON
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
     }
-
-    transformData._flush = function (callback) {
-        callback(null, ']')
-    }
-
-    const customer = Customer.find().cursor().pipe(transformData)
-    customer.pipe(res)
-
-    // try {
-    //     const data = await Customer.find();
-    //     res.json(data); // отправляем данные в формате JSON
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).send(error.message);
-    // }
 });
 
 
