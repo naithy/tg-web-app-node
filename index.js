@@ -45,8 +45,19 @@ const start = async () => {
 
 const changeStream = Customer.watch()
 changeStream.on('change', (change) => {
-    console.log(change); // You could parse out the needed info and send only that data.
-    io.emit('changeData', change);
+    const customer = {
+        _id: change.fullDocument._id,
+        first_name: change.fullDocument.first_name,
+        username: change.fullDocument.username,
+        totalPrice: change.fullDocument.totalPrice,
+        cart: change.fullDocument.cart,
+        birthday: change.fullDocument.birthday,
+        number: change.fullDocument.number,
+        createdAt: change.fullDocument.createdAt,
+    }
+
+    console.log(customer);
+    io.emit('changeData', customer);
 });
 
 io.on('connection', function () {
