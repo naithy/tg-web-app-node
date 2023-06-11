@@ -43,7 +43,6 @@ const start = async () => {
 }
 
 io.on('connection', async (socket) => {
-    console.log('connected');
     try {
         const customers = await Customer.find();
         socket.emit('items', customers);
@@ -65,17 +64,14 @@ io.on('connection', async (socket) => {
                 createdAt: change.fullDocument.createdAt,
             };
             socket.emit('changeData', customer);
-            console.log('sended');
         } else if (change.operationType === 'update') {
             const updatedCustomer = {
                 _id: change.documentKey._id,
                 ...change.updateDescription.updatedFields,
             };
             socket.emit('updateData', updatedCustomer);
-            console.log('updated');
         } else if (change.operationType === 'delete') {
             socket.emit('deleteData', change.documentKey._id);
-            console.log('deleted');
         }
     });
 });
