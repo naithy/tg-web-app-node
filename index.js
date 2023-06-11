@@ -52,17 +52,13 @@ io.on('connection',(socket)=>{
     })
 })
 
-const db = mongoose.connection;
 
-setInterval(()=>{
-    const changeStream = Customer.watch();
-    changeStream.on('change', () => {
-        Customer.find({},(err, items) => {
-            io.to('clock-room').emit('time', items)
-        })
-    })
 
-},1000)
+const changeStream = Customer.watch();
+changeStream.on('change', () => {
+    Customer.find({},(err, items) => {
+        io.to('clock-room').emit('time', items)
+    })}
 
 
 bot.on('message', async (msg) => {
