@@ -47,7 +47,6 @@ io.on('connection', function () {
     Customer.find({})
         .then((items) => {
             io.emit('items', items);
-            console.log(items)
         })
         .catch((err) => {
             console.error(err);
@@ -69,7 +68,6 @@ changeStream.on('change', (change) => {
             number: change.fullDocument.number,
             createdAt: change.fullDocument.createdAt,
         }
-        console.log(customer);
         io.emit('item', customer);
     }
 });
