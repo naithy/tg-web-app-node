@@ -51,27 +51,25 @@ io.on('connection', function () {
         .catch((err) => {
             console.error(err);
         });
-});
 
-
-
-const changeStream = Customer.watch()
-changeStream.on('change', (change) => {
-    if (change.operationType === 'insert') {
-        const customer = {
-            _id: change.fullDocument._id,
-            first_name: change.fullDocument.first_name,
-            username: change.fullDocument.username,
-            totalPrice: change.fullDocument.totalPrice,
-            cart: change.fullDocument.cart,
-            birthday: change.fullDocument.birthday,
-            number: change.fullDocument.number,
-            createdAt: change.fullDocument.createdAt,
+    const changeStream = Customer.watch()
+    changeStream.on('change', (change) => {
+        if (change.operationType === 'insert') {
+            const customer = {
+                _id: change.fullDocument._id,
+                first_name: change.fullDocument.first_name,
+                username: change.fullDocument.username,
+                totalPrice: change.fullDocument.totalPrice,
+                cart: change.fullDocument.cart,
+                birthday: change.fullDocument.birthday,
+                number: change.fullDocument.number,
+                createdAt: change.fullDocument.createdAt,
+            }
+            io.emit('item', customer);
         }
-        io.emit('item', customer);
-    }
-});
+    });
 
+});
 
 
 bot.on('message', async (msg) => {
