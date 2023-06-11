@@ -45,10 +45,14 @@ const start = async () => {
 io.on('connection', function () {
     console.log('connected');
 
-    Customer.find({}, (err, items) => {
-        io.emit('items', items)
-        console.log(items)
-    })
+    Customer.find({})
+        .then((items) => {
+            io.emit('items', items);
+            console.log(items)
+        })
+        .catch((err) => {
+            console.error(err);
+        });
 
     const changeStream = Customer.watch()
     changeStream.on('change', (change) => {
