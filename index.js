@@ -54,17 +54,26 @@ io.on('connection',(socket)=>{
 
 const db = mongoose.connection;
 db.once('open', () => {
-    const collection = db.collection('web-data');
-    const changeStream = collection.watch();
+    const collectionChangeStream = db.collection('web-data').watch();
 
     // обработка изменений
-    changeStream.on('change', (change) => {
-        console.log('Change:', change);
+    collectionChangeStream.on('change', (change) => {
+       const collection = {
+           _id: change.fullDocument._id,
+           first_name: change.fullDocument.first_name,
+           username: change.fullDocument.username,
+           totalPrice: change.fullDocument.totalPrice,
+           cart: change.fullDocument.cart,
+           birthday: change.fullDocument.birthday,
+           number: change.fullDocument.number,
+           createdAt: change.fullDocument.createdAt
+       }
+        io.to('clock-room').emit('time', collection)
     });
 });
-setInterval(()=>{
-    io.to('clock-room').emit('time', new Date())
-},1000)
+// setInterval(()=>{
+//     io.to('clock-room').emit('time', new Date())
+// },1000)
 
 
 bot.on('message', async (msg) => {
