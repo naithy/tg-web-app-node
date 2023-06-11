@@ -117,6 +117,7 @@ app.get('/web-data', async (req, res) => {
 app.delete('/web-data', async (req, res) => {
     try {
         const {dataClient} = req.body
+        console.log(dataClient)
         await Customer.deleteOne({ _id: dataClient })
         res.status(200)
     } catch (error) {
