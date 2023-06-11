@@ -54,13 +54,16 @@ io.on('connection',(socket)=>{
 
 const db = mongoose.connection;
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('Client connected');
 
     // send data on connection
-    Customer.find({}, (err, items) => {
+    try {
+        const items = await Customer.find({});
         socket.emit('items', items);
-    });
+    } catch (err) {
+        console.error(err);
+    }
 
     // listen for updates
     const changeStream = Customer.watch();
