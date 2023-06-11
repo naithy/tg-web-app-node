@@ -44,17 +44,17 @@ const start = async () => {
 
 io.on('connection', function () {
     console.log('connected');
-
+    Customer.find({})
+        .then((items) => {
+            io.emit('items', items);
+            console.log(items)
+        })
+        .catch((err) => {
+            console.error(err);
+        });
 });
 
-Customer.find({})
-    .then((items) => {
-        io.emit('items', items);
-        console.log(items)
-    })
-    .catch((err) => {
-        console.error(err);
-    });
+
 
 const changeStream = Customer.watch()
 changeStream.on('change', (change) => {
