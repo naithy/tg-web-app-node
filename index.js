@@ -6,6 +6,8 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
 const socketIo = require('socket.io')
+const { Transform } = require('stream')
+
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
@@ -42,31 +44,6 @@ const start = async () => {
     }
 }
 
-io.on('connection',(socket)=>{
-    console.log('client connected: ', socket.id)
-
-    socket.join('clock-room')
-
-    socket.on('disconnect', (reason)=> {
-        console.log(reason)
-    })
-})
-
-const db = mongoose.connection;
-db.once('open', () => {
-    const collection = db.collection('web-data');
-    const changeStream = collection.watch();
-
-    // обработка изменений
-    changeStream.on('change', (change) => {
-        console.log('Change:', change);
-    });
-});
-setInterval(()=>{
-    io.to('clock-room').emit('time', new Date())
-},1000)
-
-
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     })
@@ -94,13 +71,34 @@ app.post('/web-data', async (req, res) => {
 });
 
 app.get('/web-data', async (req, res) => {
-    try {
-        const data = await Customer.find();
-        res.json(data); // отправляем данные в формате JSON
-    } catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
+    res.setHeader('Access-Control-Allow-Origin', '*')
+
+    const transformData = new Transform({objectMode: true})
+    transformData.isWritten = false;
+
+    transformData._transform = function (chunk, encoding, callback) {
+        if (!this.isWritten) {
+            this.isWritten = true
+            callback(null, '[' + JSON.stringify(chunk))
+        } else {
+            callback(null, ',' + JSON.stringify((chunk)))
+        }
     }
+
+    transformData._flush = function (callback) {
+        callback(null, ']')
+    }
+
+    const customer = Customer.find().cursor().pipe(transformData)
+    customer.pipe(res)
+
+    // try {
+    //     const data = await Customer.find();
+    //     res.json(data); // отправляем данные в формате JSON
+    // } catch (error) {
+    //     console.error(error);
+    //     res.status(500).send(error.message);
+    // }
 });
 
 
