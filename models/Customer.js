@@ -16,6 +16,6 @@ const CustomerSchema = new mongoose.Schema({
     cart: Object,
     birthday: String,
     number: String,
-    dateTime: {type: Date, default: getTimeStamp()}
+    dateTime: {type: Date, default: getTimeStamp}
 });
 module.exports = mongoose.model('Customer', CustomerSchema);
