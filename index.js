@@ -90,9 +90,9 @@ app.post('/web-data', async (req, res) => {
     const {user, totalPrice, cart, birthday, number} = req.body;
     try {
         const customer = new Customer({
-            // first_name: user.first_name,
-            // chat_id: user.id,
-            // username: user?.username,
+            first_name: user.first_name,
+            chat_id: user.id,
+            username: user?.username,
             cart: cart,
             totalPrice: totalPrice,
             birthday: birthday,
