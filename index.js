@@ -42,15 +42,14 @@ const start = async () => {
     }
 }
 
-io.on('connection', function () {
+io.on('connection', async (socket) => {
     console.log('connected');
-    Customer.find({})
-        .then((items) => {
-            io.emit('items', items);
-        })
-        .catch((err) => {
-            console.error(err);
-        });
+    try {
+        const customers = await Customer.find();
+        socket.emit('items', customers);
+    } catch (err) {
+        console.error(err);
+    }
 
     const changeStream = Customer.watch();
     changeStream.on('change', (change) => {
@@ -64,22 +63,21 @@ io.on('connection', function () {
                 birthday: change.fullDocument.birthday,
                 number: change.fullDocument.number,
                 createdAt: change.fullDocument.createdAt,
-            }
-            io.emit('changeData', customer);
-            console.log('sended')
+            };
+            socket.emit('changeData', customer);
+            console.log('sended');
         } else if (change.operationType === 'update') {
             const updatedCustomer = {
                 _id: change.documentKey._id,
                 ...change.updateDescription.updatedFields,
-            }
-            io.emit('updateData', updatedCustomer);
-            console.log('updated')
+            };
+            socket.emit('updateData', updatedCustomer);
+            console.log('updated');
         } else if (change.operationType === 'delete') {
-            io.emit('deleteData', change.documentKey._id);
-            console.log('deleted')
+            socket.emit('deleteData', change.documentKey._id);
+            console.log('deleted');
         }
     });
-
 });
 
 
