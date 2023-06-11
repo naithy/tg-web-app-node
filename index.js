@@ -54,7 +54,7 @@ io.on('connection',(socket)=>{
 
 const db = mongoose.connection;
 db.once('open', () => {
-    const collectionChangeStream = db.collection('web-data').watch();
+    const collectionChangeStream = db.collection('customers').watch();
 
     // обработка изменений
     collectionChangeStream.on('change', (change) => {
