@@ -52,10 +52,10 @@ io.on('connection', function () {
             console.error(err);
         });
 
-    const changeStream = Customer.watch()
+    const changeStream = Customer.watch();
     changeStream.on('change', (change) => {
         if (change.operationType === 'insert') {
-            const customer = [{
+            const customer = {
                 _id: change.fullDocument._id,
                 first_name: change.fullDocument.first_name,
                 username: change.fullDocument.username,
@@ -64,9 +64,19 @@ io.on('connection', function () {
                 birthday: change.fullDocument.birthday,
                 number: change.fullDocument.number,
                 createdAt: change.fullDocument.createdAt,
-            }]
+            }
             io.emit('changeData', customer);
             console.log('sended')
+        } else if (change.operationType === 'update') {
+            const updatedCustomer = {
+                _id: change.documentKey._id,
+                ...change.updateDescription.updatedFields,
+            }
+            io.emit('updateData', updatedCustomer);
+            console.log('updated')
+        } else if (change.operationType === 'delete') {
+            io.emit('deleteData', change.documentKey._id);
+            console.log('deleted')
         }
     });
 
