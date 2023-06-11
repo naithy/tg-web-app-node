@@ -3,9 +3,8 @@ const {Schema, model} = require('mongoose')
 
 let current = new Date();
 
-const timeStamp = new Date(Date.UTC(current.getFullYear(),
-    current.getMonth(),current.getDate(),current.getHours(),
-    current.getMinutes(),current.getSeconds(), current.getMilliseconds()));
+const timeStamp = new Date(Date.UTC(current.getFullYear(), current.getMonth(), current.getDate(),
+    current.getHours(), current.getMinutes(), current.getSeconds()));
 
 const CustomerSchema = new mongoose.Schema({
     first_name: String,
