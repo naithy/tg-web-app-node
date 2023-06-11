@@ -43,7 +43,6 @@ const start = async () => {
 }
 
 io.on('connection', function () {
-
     console.log('connected');
     Customer.find({})
         .then((items) => {
@@ -52,34 +51,27 @@ io.on('connection', function () {
         .catch((err) => {
             console.error(err);
         });
-
-    let sentItems = [];
-
-    const changeStream = Customer.watch()
-    changeStream.on('change', (change) => {
-        if (change.operationType === 'insert') {
-            const customer = [{
-                _id: change.fullDocument._id,
-                first_name: change.fullDocument.first_name,
-                username: change.fullDocument.username,
-                totalPrice: change.fullDocument.totalPrice,
-                cart: change.fullDocument.cart,
-                birthday: change.fullDocument.birthday,
-                number: change.fullDocument.number,
-                createdAt: change.fullDocument.createdAt,
-            }]
-            if (!sentItems.some(item => item._id.equals(change.fullDocument._id))) {
-                sentItems.push(change.fullDocument);
-                io.emit('item', customer);
-            } else {
-                Customer.find({}, (err, items) => {
-                    sentItems = items;
-                    io.emit('items', items);
-                });
-            }
-        }
-    });
 });
+
+
+
+const changeStream = Customer.watch()
+changeStream.on('change', (change) => {
+    if (change.operationType === 'insert') {
+        const customer = {
+            _id: change.fullDocument._id,
+            first_name: change.fullDocument.first_name,
+            username: change.fullDocument.username,
+            totalPrice: change.fullDocument.totalPrice,
+            cart: change.fullDocument.cart,
+            birthday: change.fullDocument.birthday,
+            number: change.fullDocument.number,
+            createdAt: change.fullDocument.createdAt,
+        }
+        io.emit('item', customer);
+    }
+});
+
 
 
 bot.on('message', async (msg) => {
