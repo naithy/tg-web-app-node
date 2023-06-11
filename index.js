@@ -42,18 +42,6 @@ const start = async () => {
     }
 }
 
-io.on('connection', function () {
-    console.log('connected');
-    Customer.find({})
-        .then((items) => {
-            io.emit('items', items);
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-});
-
-
 
 const changeStream = Customer.watch()
 changeStream.on('change', (change) => {
@@ -68,10 +56,14 @@ changeStream.on('change', (change) => {
             number: change.fullDocument.number,
             createdAt: change.fullDocument.createdAt,
         }
-        io.emit('item', customer);
+        console.log(customer);
+        io.emit('changeData', change);
     }
 });
 
+io.on('connection', function () {
+    console.log('connected');
+});
 
 
 bot.on('message', async (msg) => {
