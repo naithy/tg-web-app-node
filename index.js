@@ -43,6 +43,7 @@ const start = async () => {
 }
 
 io.on('connection', function () {
+
     console.log('connected');
     Customer.find({})
         .then((items) => {
@@ -51,6 +52,8 @@ io.on('connection', function () {
         .catch((err) => {
             console.error(err);
         });
+
+    let sentItems = [];
 
     const changeStream = Customer.watch()
     changeStream.on('change', (change) => {
@@ -65,10 +68,17 @@ io.on('connection', function () {
                 number: change.fullDocument.number,
                 createdAt: change.fullDocument.createdAt,
             }]
-            io.emit('changeData', customer);
+            if (!sentItems.some(item => item._id.equals(customer._id))) {
+                sentItems.push(customer);
+                io.emit('item', customer);
+            } else {
+                Customer.find({}, (err, items) => {
+                    sentItems = items;
+                    io.emit('items', items);
+                });
+            }
         }
     });
-
 });
 
 
