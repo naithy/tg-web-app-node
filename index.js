@@ -45,36 +45,34 @@ const start = async () => {
 io.on('connection', function () {
     console.log('connected');
 
-    Customer.find({})
-        .then((items) => {
-            io.emit('items', items);
-            console.log(items)
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-
-    const changeStream = Customer.watch()
-    changeStream.on('change', (change) => {
-        if (change.operationType === 'insert') {
-            const customer = {
-                _id: change.fullDocument._id,
-                first_name: change.fullDocument.first_name,
-                username: change.fullDocument.username,
-                totalPrice: change.fullDocument.totalPrice,
-                cart: change.fullDocument.cart,
-                birthday: change.fullDocument.birthday,
-                number: change.fullDocument.number,
-                createdAt: change.fullDocument.createdAt,
-            }
-            console.log(customer);
-            io.emit('changeData', change);
-        }
-    });
-
 });
 
+Customer.find({})
+    .then((items) => {
+        io.emit('items', items);
+        console.log(items)
+    })
+    .catch((err) => {
+        console.error(err);
+    });
 
+const changeStream = Customer.watch()
+changeStream.on('change', (change) => {
+    if (change.operationType === 'insert') {
+        const customer = [{
+            _id: change.fullDocument._id,
+            first_name: change.fullDocument.first_name,
+            username: change.fullDocument.username,
+            totalPrice: change.fullDocument.totalPrice,
+            cart: change.fullDocument.cart,
+            birthday: change.fullDocument.birthday,
+            number: change.fullDocument.number,
+            createdAt: change.fullDocument.createdAt,
+        }]
+        console.log(customer);
+        io.emit('changeData', change);
+    }
+});
 
 
 
