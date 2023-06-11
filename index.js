@@ -30,7 +30,7 @@ const io = socketIo(server, {
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb://94.198.217.174:27017,94.198.217.174:27018,94.198.217.174:27019/test?replicaSet=rs0&readPreference=secondary', {
+        await mongoose.connect('mongodb://94.198.217.174:27017/test', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
@@ -53,46 +53,19 @@ io.on('connection',(socket)=>{
 })
 
 const db = mongoose.connection;
+db.once('open', () => {
+    const collection = db.collection('web-data');
+    const changeStream = collection.watch();
 
-io.on('connection', async (socket) => {
-    console.log('Client connected');
-
-    // send data on connection
-    try {
-        const items = await Customer.find({});
-        socket.emit('items', items);
-    } catch (err) {
-        console.error(err);
-    }
-
-    // listen for updates
-    const changeStream = Customer.watch();
-    changeStream.on('change', () => {
-        Customer.find({}, (err, items) => {
-            socket.emit('items', items);
-        });
+    // обработка изменений
+    changeStream.on('change', (change) => {
+        console.log('Change:', change);
     });
 });
+setInterval(()=>{
+    io.to('clock-room').emit('time', new Date())
+},1000)
 
-
-// db.once('open', () => {
-//     const collectionChangeStream = db.collection('customers').watch();
-//
-//     // обработка изменений
-//     collectionChangeStream.on('change', (change) => {
-//        const collection = {
-//            _id: change.fullDocument._id,
-//            first_name: change.fullDocument.first_name,
-//            username: change.fullDocument.username,
-//            totalPrice: change.fullDocument.totalPrice,
-//            cart: change.fullDocument.cart,
-//            birthday: change.fullDocument.birthday,
-//            number: change.fullDocument.number,
-//            createdAt: change.fullDocument.createdAt
-//        }
-//         io.to('clock-room').emit('time', collection)
-//     });
-// });
 
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
