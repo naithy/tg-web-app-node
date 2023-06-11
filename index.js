@@ -66,6 +66,7 @@ io.on('connection', function () {
                 createdAt: change.fullDocument.createdAt,
             }]
             io.emit('changeData', customer);
+            console.log('sended')
         }
     });
 
