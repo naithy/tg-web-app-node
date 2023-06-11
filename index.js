@@ -59,7 +59,7 @@ io.on('connection', function () {
 const changeStream = Customer.watch()
 changeStream.on('change', (change) => {
     if (change.operationType === 'insert') {
-        const customer = [{
+        const customer = {
             _id: change.fullDocument._id,
             first_name: change.fullDocument.first_name,
             username: change.fullDocument.username,
@@ -68,9 +68,9 @@ changeStream.on('change', (change) => {
             birthday: change.fullDocument.birthday,
             number: change.fullDocument.number,
             createdAt: change.fullDocument.createdAt,
-        }]
+        }
         console.log(customer);
-        io.emit('changeData', customer);
+        io.emit('item', customer);
     }
 });
 
