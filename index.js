@@ -53,28 +53,43 @@ io.on('connection',(socket)=>{
 })
 
 const db = mongoose.connection;
-db.once('open', () => {
-    const collectionChangeStream = db.collection('customers').watch();
 
-    // обработка изменений
-    collectionChangeStream.on('change', (change) => {
-       const collection = {
-           _id: change.fullDocument._id,
-           first_name: change.fullDocument.first_name,
-           username: change.fullDocument.username,
-           totalPrice: change.fullDocument.totalPrice,
-           cart: change.fullDocument.cart,
-           birthday: change.fullDocument.birthday,
-           number: change.fullDocument.number,
-           createdAt: change.fullDocument.createdAt
-       }
-        io.to('clock-room').emit('time', collection)
+io.on('connection', (socket) => {
+    console.log('Client connected');
+
+    // send data on connection
+    Customer.find({}, (err, items) => {
+        socket.emit('items', items);
+    });
+
+    // listen for updates
+    const changeStream = Customer.watch();
+    changeStream.on('change', () => {
+        Customer.find({}, (err, items) => {
+            socket.emit('items', items);
+        });
     });
 });
-// setInterval(()=>{
-//     io.to('clock-room').emit('time', new Date())
-// },1000)
 
+
+// db.once('open', () => {
+//     const collectionChangeStream = db.collection('customers').watch();
+//
+//     // обработка изменений
+//     collectionChangeStream.on('change', (change) => {
+//        const collection = {
+//            _id: change.fullDocument._id,
+//            first_name: change.fullDocument.first_name,
+//            username: change.fullDocument.username,
+//            totalPrice: change.fullDocument.totalPrice,
+//            cart: change.fullDocument.cart,
+//            birthday: change.fullDocument.birthday,
+//            number: change.fullDocument.number,
+//            createdAt: change.fullDocument.createdAt
+//        }
+//         io.to('clock-room').emit('time', collection)
+//     });
+// });
 
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
