@@ -52,13 +52,19 @@ io.on('connection',(socket)=>{
     })
 })
 
+const db = mongoose.connection;
+db.once('open', () => {
+    const collection = db.collection('web-data');
+    const changeStream = collection.watch();
 
-
-const changeStream = Customer.watch();
-changeStream.on('change', () => {
-    Customer.find({},(err, items) => {
-        io.to('clock-room').emit('time', items)
-    })})
+    // обработка изменений
+    changeStream.on('change', (change) => {
+        console.log('Change:', change);
+    });
+});
+setInterval(()=>{
+    io.to('clock-room').emit('time', new Date())
+},1000)
 
 
 bot.on('message', async (msg) => {
