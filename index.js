@@ -70,7 +70,7 @@ changeStream.on('change', (change) => {
             createdAt: change.fullDocument.createdAt,
         }]
         console.log(customer);
-        io.emit('items', change);
+        io.emit('items', customer);
     }
 });
 
