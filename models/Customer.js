@@ -19,5 +19,5 @@ const CustomerSchema = new mongoose.Schema({
     birthday: String,
     number: String,
     dateTime: {type: Date, default: timeStamp}
-}, { timestamps: true });
+});
 module.exports = mongoose.model('Customer', CustomerSchema);
