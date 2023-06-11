@@ -42,22 +42,19 @@ const start = async () => {
     }
 }
 
-io.on("connection", (socket) => {
-    console.log("connected");
-
-    let clientConnectedTime = new Date().getTime(); // сохраняем метку времени подключения клиента
-
-    Customer.find({ createdAt: { $gt: clientConnectedTime } }) // получаем все новые записи, которые добавились после времени подключения клиента
+io.on('connection', function () {
+    console.log('connected');
+    Customer.find({})
         .then((items) => {
-            socket.emit("items", items);
+            io.emit('items', items);
         })
         .catch((err) => {
             console.error(err);
         });
 
     const changeStream = Customer.watch();
-    changeStream.on("change", (change) => {
-        if (change.operationType === "insert") {
+    changeStream.on('change', (change) => {
+        if (change.operationType === 'insert') {
             const customer = {
                 _id: change.fullDocument._id,
                 first_name: change.fullDocument.first_name,
@@ -67,23 +64,22 @@ io.on("connection", (socket) => {
                 birthday: change.fullDocument.birthday,
                 number: change.fullDocument.number,
                 createdAt: change.fullDocument.createdAt,
-            };
-            socket.to("customers").emit("changeData", customer);
-            console.log("sended");
-        } else if (change.operationType === "update") {
+            }
+            io.emit('changeData', customer);
+            console.log('sended')
+        } else if (change.operationType === 'update') {
             const updatedCustomer = {
                 _id: change.documentKey._id,
                 ...change.updateDescription.updatedFields,
-            };
-            socket.to("customers").emit("updateData", updatedCustomer);
-            console.log("updated");
-        } else if (change.operationType === "delete") {
-            socket.to("customers").emit("deleteData", change.documentKey._id);
-            console.log("deleted");
+            }
+            io.emit('updateData', updatedCustomer);
+            console.log('updated')
+        } else if (change.operationType === 'delete') {
+            io.emit('deleteData', change.documentKey._id);
+            console.log('deleted')
         }
     });
 
-    socket.join("customers");
 });
 
 
