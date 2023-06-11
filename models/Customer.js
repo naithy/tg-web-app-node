@@ -3,7 +3,7 @@ const {Schema, model} = require('mongoose')
 
 let current = new Date();
 
-current.setHours(utc.getHours() + 4);
+current.setHours(current.getHours() + 4);
 
 const timeStamp = new Date(Date.UTC(current.getFullYear(),
     current.getMonth(),current.getDate(),current.getHours(),
