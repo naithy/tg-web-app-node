@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const {Schema, model} = require('mongoose')
 
+let current = new Date();
+
+current.setHours(utc.getHours() + 4);
+
+const timeStamp = new Date(Date.UTC(current.getFullYear(),
+    current.getMonth(),current.getDate(),current.getHours(),
+    current.getMinutes(),current.getSeconds(), current.getMilliseconds()));
 
 
 const CustomerSchema = new mongoose.Schema({
@@ -10,6 +17,7 @@ const CustomerSchema = new mongoose.Schema({
     totalPrice: Number,
     cart: Object,
     birthday: String,
-    number: String
+    number: String,
+    dateTime: {type: Date, default: timeStamp}
 }, { timestamps: true });
 module.exports = mongoose.model('Customer', CustomerSchema);
