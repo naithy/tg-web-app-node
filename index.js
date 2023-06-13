@@ -6,13 +6,15 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
 const socketIo = require('socket.io')
+const Product = require('./models/Product')
+
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
     key: fs.readFileSync('privkey.pem')
 };
 
-const token = '6206628203:AAGKvS-tRT3BKXP2YVxUOb0tH1tfFlvYxC8';
+const token = process.env.TOKEN;
 
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
@@ -124,5 +126,11 @@ app.delete('/web-data', async (req, res) => {
         res.status(500).send(error.message)
     }
 })
+
+// app.get('/product/hqd', async (req, res) => {
+//     try {
+//         const data = await
+//     }
+// })
 
 start()
