@@ -66,7 +66,6 @@ io.on('connection', async (socket) => {
                 createdAt: change.fullDocument.createdAt,
             };
             socket.emit('changeData', customer);
-            console.log('sended')
         } else if (change.operationType === 'update') {
             const updatedCustomer = {
                 _id: change.documentKey._id,
@@ -97,6 +96,7 @@ app.post('/web-data', async (req, res) => {
             birthday: birthday,
             number: number,
         });
+        console.log('sended')
         customer.save()
 
         return res.status(201).json({});
