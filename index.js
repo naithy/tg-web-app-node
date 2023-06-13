@@ -108,7 +108,7 @@ app.post('/web-data', async (req, res) => {
 app.get('/web-data', async (req, res) => {
     try {
         const data = await Customer.find();
-        res.json('data'); // отправляем данные в формате JSON
+        res.json(data); // отправляем данные в формате JSON
     } catch (error) {
         console.error(error);
         res.status(500).send(error.message);
