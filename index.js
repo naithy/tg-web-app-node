@@ -96,7 +96,6 @@ app.post('/web-data', async (req, res) => {
             birthday: birthday,
             number: number,
         });
-        console.log('sended')
         customer.save()
 
         return res.status(201).json({});
@@ -128,10 +127,32 @@ app.delete('/web-data', async (req, res) => {
     }
 })
 
-// app.get('/product/hqd', async (req, res) => {
-//     try {
-//         const data = await
-//     }
-// })
+app.get('/product', async (req, res) => {
+
+    try {
+
+        const data = await Product.find()
+    } catch (e) {
+        console.log(e)
+    }
+})
+
+app.post('/product', async (req, res) => {
+    const {category, title, price, flavors, description, img} = req.body
+    try {
+        const product = new Product({
+            category,
+            title,
+            price,
+            flavors,
+            description,
+            img
+        });
+        product.save()
+    } catch (e) {
+        console.log(e)
+    }
+
+});
 
 start()
