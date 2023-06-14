@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
 const socketIo = require('socket.io')
 const Product = require('./models/Product')
+const bodyParser = require('body-parser')
 
 
 const options = {
@@ -21,6 +22,8 @@ const app = express();
 
 app.use(cors())
 app.use(express.json())
+app.use(bodyParser.json());
+
 
 const server = https.createServer(options, app)
 
