@@ -128,12 +128,13 @@ app.delete('/web-data', async (req, res) => {
 })
 
 app.get('/product', async (req, res) => {
-
     try {
-
-        const data = await Product.find()
+        const category = req.query.category;
+        const data = await Product.find({category})
+        res.json(data)
     } catch (e) {
-        console.log(e)
+        console.error('Error fetching products:', e);
+        res.sendStatus(500);
     }
 })
 
