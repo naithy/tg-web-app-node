@@ -100,7 +100,6 @@ app.post('/web-data', async (req, res) => {
             number: number,
         });
         customer.save()
-
         return res.status(201).json({});
     } catch (e) {
         console.log(e)
@@ -132,7 +131,7 @@ app.delete('/web-data', async (req, res) => {
 
 app.get('/product', async (req, res) => {
     try {
-        const category = req.query.category;
+        const category = req.query.category || '';
         const data = await Product.find({category})
         res.json(data)
     } catch (e) {
