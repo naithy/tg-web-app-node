@@ -134,12 +134,11 @@ app.get('/product', async (req, res) => {
         const category = req.query.category;
         if (!!category) {
             const data = await Product.find({category} )
+            res.json(data)
         } else {
             const data = await Product.find()
+            res.json(data)
         }
-
-        res.json(data)
-        console.log(data)
     } catch (e) {
         console.error('Error fetching products:', e);
         res.sendStatus(500);
