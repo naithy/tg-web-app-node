@@ -183,21 +183,20 @@ app.put('/product', async (req, res) => {
 })
 
 app.post('/complete-order', async (req, res) => {
-    const {_id, user, totalPrice, cart, birthday, number, createdAt, defected} = req.body;
-    console.log(req.body)
+    const {_id, first_name, username, totalPrice, cart, birthday, number, createdAt, defected} = req.body;
     try {
-        // const completedOrder = new CompleteOrder({
-        //     _id: _id,
-        //     first_name: user.first_name,
-        //     username: user?.username,
-        //     cart: cart,
-        //     totalPrice: totalPrice,
-        //     birthday: birthday,
-        //     number: number,
-        //     createdAt1: createdAt,
-        //     defected: defected,
-        // });
-        // completedOrder.save()
+        const completedOrder = new CompleteOrder({
+            _id: _id,
+            first_name: first_name,
+            username: username,
+            cart: cart,
+            totalPrice: totalPrice,
+            birthday: birthday,
+            number: number,
+            createdAt1: createdAt,
+            defected: defected,
+        });
+        completedOrder.save()
     } catch (e) {
         console.log(e)
     }
