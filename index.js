@@ -174,9 +174,9 @@ app.delete('/product', async (req, res) => {
 })
 
 app.put('/product', async (req, res) => {
-    const {_id, category, title, price, flavors, description, img} = req.body
+    const {_id} = req.body
     try {
-        console.log(req.body)
+        await Product.replaceOne({_id}, req.body)
     } catch (e) {
         console.log(e)
     }
