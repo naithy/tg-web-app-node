@@ -164,12 +164,12 @@ app.post('/product', async (req, res) => {
 });
 
 app.delete('/product', async (req, res) => {
-    console.log(req.body)
-    // try {
-    //     Product.deleteOne({_id: id})
-    // } catch (e) {
-    //     console.log(e)
-    // }
+    const {id} = req.body
+    try {
+        Product.deleteOne({_id: id})
+    } catch (e) {
+        console.log(e)
+    }
 })
 
 start()
