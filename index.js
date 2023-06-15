@@ -182,4 +182,8 @@ app.put('/product', async (req, res) => {
     }
 })
 
+app.post('/complete-order', async (req, res) => {
+    console.log(req.body)
+})
+
 start()
