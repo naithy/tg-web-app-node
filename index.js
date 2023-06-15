@@ -31,7 +31,7 @@ const io = socketIo(server, {
     cors: {
         origin: 'http://localhost:3000'
     }
-})
+});
 
 const start = async () => {
     try {
@@ -45,7 +45,7 @@ const start = async () => {
     } catch (e) {
         console.log(e)
     }
-}
+};
 
 io.on('connection', async (socket) => {
     try {
@@ -84,7 +84,7 @@ io.on('connection', async (socket) => {
 
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
-    })
+    });
 
 
 app.post('/web-data', async (req, res) => {
@@ -127,7 +127,7 @@ app.delete('/web-data', async (req, res) => {
         console.log(error);
         res.status(500).send(error.message)
     }
-})
+});
 
 app.get('/product', async (req, res) => {
     try {
@@ -143,7 +143,7 @@ app.get('/product', async (req, res) => {
         console.error('Error fetching products:', e);
         res.sendStatus(500);
     }
-})
+});
 
 app.post('/product', async (req, res) => {
     const {category, title, price, flavors, description, img} = req.body
@@ -171,7 +171,7 @@ app.delete('/product', async (req, res) => {
     } catch (e) {
         console.log(e)
     }
-})
+});
 
 app.put('/product', async (req, res) => {
     const {_id} = req.body
@@ -180,7 +180,7 @@ app.put('/product', async (req, res) => {
     } catch (e) {
         console.log(e)
     }
-})
+});
 
 app.post('/complete-order', async (req, res) => {
     const {_id, first_name, username, totalPrice, cart, birthday, number, createdAt, defected} = req.body;
@@ -200,6 +200,15 @@ app.post('/complete-order', async (req, res) => {
     } catch (e) {
         console.log(e)
     }
-})
+});
+
+app.get('/complete-order', async (req, res) => {
+    try {
+        const data = await CompleteOrder.find();
+        res.json(data)
+    } catch (e) {
+        console.log(e)
+    }
+});
 
 start()
