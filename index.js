@@ -167,7 +167,7 @@ app.delete('/product', async (req, res) => {
     const {id} = req.body
     console.log(id)
     try {
-        Product.deleteOne({_id: id})
+        await Product.deleteOne({_id: id})
     } catch (e) {
         console.log(e)
     }
