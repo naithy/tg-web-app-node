@@ -8,7 +8,7 @@ const Customer = require('./models/Customer');
 const socketIo = require('socket.io')
 const Product = require('./models/Product')
 const bodyParser = require('body-parser')
-
+const CompleteOrder = require('./models/CompletedOrder')
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
@@ -183,7 +183,24 @@ app.put('/product', async (req, res) => {
 })
 
 app.post('/complete-order', async (req, res) => {
-    console.log(req.body)
+    const {_id, user, totalPrice, cart, birthday, number, createdAt, defected} = req.body;
+    try {
+        const completedOrder = new CompleteOrder({
+            _id: _id,
+            first_name: user.first_name,
+            chat_id: user.id,
+            username: user?.username,
+            cart: cart,
+            totalPrice: totalPrice,
+            birthday: birthday,
+            number: number,
+            createdAt1: createdAt,
+            defected: defected,
+        });
+        completedOrder.save()
+    } catch (e) {
+        console.log(e)
+    }
 })
 
 start()
