@@ -48,9 +48,9 @@ const start = async () => {
 };
 
 const chatId = -1772210713; // вставьте ID вашей группы / канала
-bot.getChatAdministrators(chatId).then(admins => {
+bot.getChatAdministrators('@testsakurashop').then(admins => {
     admins.forEach(admin => {
-        bot.sendMessage(chatId, message, { chat_id: admin.user.id });
+        bot.sendMessage('@testsakurashop', message, { chat_id: admin.user.id });
     });
 });
 
