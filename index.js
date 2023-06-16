@@ -47,7 +47,7 @@ const start = async () => {
     }
 };
 
-bot.getChatMembers('@testsakurashop').then(members => {
+bot.getChatMember('@testsakurashop').then(members => {
     let userIds = members.map(member => member.user.id);
     console.log(userIds);
 });
