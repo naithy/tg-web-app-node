@@ -47,7 +47,9 @@ const start = async () => {
     }
 };
 
-console.log(bot.getChatMemberCount('@testsakurashop'))
+bot.getChatMemberCount('@testsakurashop').then(count => {
+    console.log(`Количество подписчиков канала testsakurashop: ${count}`);
+});
 
 io.on('connection', async (socket) => {
     try {
