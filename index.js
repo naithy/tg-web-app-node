@@ -223,6 +223,8 @@ app.get('/stats', async (req, res) => {
             countCompleteOrders: count,
             totalRevenue: result[0].totalRevenue
         })
+        const data = await Statistic.find();
+        res.json(data)
     } catch (e) {
         console.log(e)
     }
