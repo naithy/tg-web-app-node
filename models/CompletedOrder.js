@@ -6,6 +6,7 @@ const CompleteOrderSchema = new mongoose.Schema({
     chat_id: Number,
     username: String,
     totalPrice: Number,
+    revenue: Number,
     cart: Object,
     birthday: String,
     number: String,
