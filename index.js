@@ -9,6 +9,8 @@ const socketIo = require('socket.io')
 const Product = require('./models/Product')
 const bodyParser = require('body-parser')
 const CompleteOrder = require('./models/CompletedOrder')
+const Stats = require('./models/Stats')
+
 
 const options = {
     cert: fs.readFileSync('fullchain.pem'),
@@ -198,7 +200,7 @@ app.post('/complete-order', async (req, res) => {
             createdAt1: createdAt,
             defected: defected,
         });
-        completedOrder.save()
+        await completedOrder.save()
     } catch (e) {
         console.log(e)
     }
@@ -206,6 +208,13 @@ app.post('/complete-order', async (req, res) => {
 
 app.get('/complete-order', async (req, res) => {
     const result = await CompleteOrder.aggregate([{ $group: {_id: null, totalRevenue: {$sum: "$revenue" } } }]);
+    const stats = new Stats({
+        countOrders: 0,
+        countCompleteOrders: 0,
+        totalRevenue: result
+    })
+
+    await stats.save()
     console.log(result[0].totalRevenue)
 
     try {
