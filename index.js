@@ -47,7 +47,7 @@ const start = async () => {
     }
 };
 
-console.log(bot.getChatMemberCount('-1772210713'))
+console.log(bot.getChatMemberCount('1772210713'))
 
 io.on('connection', async (socket) => {
     try {
