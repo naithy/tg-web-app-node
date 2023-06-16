@@ -9,7 +9,7 @@ const socketIo = require('socket.io')
 const Product = require('./models/Product')
 const bodyParser = require('body-parser')
 const CompleteOrder = require('./models/CompletedOrder')
-const Stats = require('./models/Stats')
+const Statistic = require('./models/Stats')
 
 
 const options = {
@@ -208,13 +208,13 @@ app.post('/complete-order', async (req, res) => {
 
 app.get('/complete-order', async (req, res) => {
     const result = await CompleteOrder.aggregate([{ $group: {_id: null, totalRevenue: {$sum: "$revenue" } } }]);
-    const stats = new Stats({
+    const statistic = new Statistic({
         countOrders: 0,
         countCompleteOrders: 0,
         totalRevenue: result[0].totalRevenue
     })
 
-    await stats.save()
+    await statistic.save()
     console.log(result[0].totalRevenue)
 
     try {

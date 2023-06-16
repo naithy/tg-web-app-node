@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const {Schema, model} = require('mongoose')
 
-const StatsSchema = new mongoose.Schema({
+const StatisticSchema = new mongoose.Schema({
     countOrders: Number,
     countCompleteOrders: Number,
     totalRevenue: Number
 }, {timestamps: true});
-module.exports = mongoose.model('Stats', StatsSchema);
+module.exports = mongoose.model('Statistic', StatisticSchema);
