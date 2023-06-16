@@ -205,7 +205,7 @@ app.post('/complete-order', async (req, res) => {
 });
 
 app.get('/complete-order', async (req, res) => {
-    const result = await CompleteOrder.aggregate([{ $group: { $group: {_id: null, totalRevenue: {$sum: "$revenue" } } }}]);
+    const result = await CompleteOrder.aggregate([{ $group: {_id: null, totalRevenue: {$sum: "$revenue" } } }]);
     console.log(result)
 
     try {
