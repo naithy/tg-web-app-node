@@ -222,7 +222,6 @@ app.get('/stats', async (req, res) => {
         const result2 = result[0]?.totalRevenue || 0
         const result3 = await CompleteOrder.aggregate([{ $group: {_id: null, totalPrice: {$sum: "$totalPrice" } } }]);
         const result4 = result3[0]?.totalPrice || 0
-        console.log(result4)
         const id = '648c9369a4896442f8b8a21e';
         const updateData = { totalRevenue: result2, countCompleteOrders: count, revenue: result4 }
         const options = { new: true };
