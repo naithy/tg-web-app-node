@@ -47,12 +47,6 @@ const start = async () => {
     }
 };
 
-const chatId = -1772210713; // вставьте ID вашей группы / канала
-bot.getChatAdministrators('@testsakurashop').then(admins => {
-    admins.forEach(admin => {
-        bot.sendMessage('@testsakurashop', 'test', { chat_id: admin.user.id });
-    });
-});
 
 io.on('connection', async (socket) => {
     try {
@@ -191,19 +185,20 @@ app.put('/product', async (req, res) => {
 
 app.post('/complete-order', async (req, res) => {
     const {_id, first_name, username, totalPrice, cart, birthday, number, createdAt, defected} = req.body;
+    console.log(defected)
     try {
-        const completedOrder = new CompleteOrder({
-            _id: _id,
-            first_name: first_name,
-            username: username,
-            cart: cart,
-            totalPrice: totalPrice,
-            birthday: birthday,
-            number: number,
-            createdAt1: createdAt,
-            defected: defected,
-        });
-        completedOrder.save()
+        // const completedOrder = new CompleteOrder({
+        //     _id: _id,
+        //     first_name: first_name,
+        //     username: username,
+        //     cart: cart,
+        //     totalPrice: totalPrice,
+        //     birthday: birthday,
+        //     number: number,
+        //     createdAt1: createdAt,
+        //     defected: defected,
+        // });
+        // completedOrder.save()
     } catch (e) {
         console.log(e)
     }
