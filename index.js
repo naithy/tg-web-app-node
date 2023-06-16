@@ -205,6 +205,7 @@ app.post('/complete-order', async (req, res) => {
 });
 
 app.get('/complete-order', async (req, res) => {
+    console.log(CompleteOrder.aggregate([{$group: {_id: null, totalRevenue: {$sum: "$revenue"}}}]))
     try {
         const data = await CompleteOrder.find();
         res.json(data)
