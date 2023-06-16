@@ -220,7 +220,7 @@ app.get('/stats', async (req, res) => {
         const count = await CompleteOrder.countDocuments({});
         const result = await CompleteOrder.aggregate([{ $group: {_id: null, totalRevenue: {$sum: "$revenue" } } }]);
         Statistic.findByIdAndUpdate("648c9369a4896442f8b8a21e", {
-            countCompleteOrders: count,
+            countCompleteOrders: 2,
             totalRevenue: result[0].totalRevenue
         })
         const data = await Statistic.find();
