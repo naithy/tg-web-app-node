@@ -211,7 +211,7 @@ app.get('/complete-order', async (req, res) => {
     const stats = new Stats({
         countOrders: 0,
         countCompleteOrders: 0,
-        totalRevenue: result
+        totalRevenue: result[0].totalRevenue
     })
 
     await stats.save()
