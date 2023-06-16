@@ -208,17 +208,6 @@ app.post('/complete-order', async (req, res) => {
 
 app.get('/complete-order', async (req, res) => {
     try {
-        try {
-            const count = await CompleteOrder.countDocuments({});
-            console.log('Number of documents:', count);
-        } catch (err) {
-            console.error(err);
-        }
-    } catch (e) {
-        console.log(e)
-    }
-
-    try {
         const data = await CompleteOrder.find();
         res.json(data)
     } catch (e) {
@@ -228,8 +217,10 @@ app.get('/complete-order', async (req, res) => {
 
 app.get('/stats', async (req, res) => {
     try {
+        const count = await CompleteOrder.countDocuments({});
         const result = await CompleteOrder.aggregate([{ $group: {_id: null, totalRevenue: {$sum: "$revenue" } } }]);
         Statistic.findByIdAndUpdate("648c9369a4896442f8b8a21e", {
+            countCompleteOrders: count,
             totalRevenue: result[0].totalRevenue
         })
     } catch (e) {
