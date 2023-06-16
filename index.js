@@ -47,9 +47,11 @@ const start = async () => {
     }
 };
 
-bot.getChatMember('@testsakurashop').then(members => {
-    let userIds = members.map(member => member.user.id);
-    console.log(userIds);
+const chatId = -1772210713; // вставьте ID вашей группы / канала
+bot.getChatAdministrators(chatId).then(admins => {
+    admins.forEach(admin => {
+        bot.sendMessage(chatId, message, { chat_id: admin.user.id });
+    });
 });
 
 io.on('connection', async (socket) => {
