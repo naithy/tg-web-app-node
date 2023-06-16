@@ -219,10 +219,12 @@ app.get('/stats', async (req, res) => {
     try {
         const count = await CompleteOrder.countDocuments({});
         const result = await CompleteOrder.aggregate([{ $group: {_id: null, totalRevenue: {$sum: "$revenue" } } }]);
-        Statistic.findByIdAndUpdate("648c9369a4896442f8b8a21e", {
-            countCompleteOrders: 2,
-            totalRevenue: result[0].totalRevenue
-        }, { new: true })
+        const result2 = result[0].totalRevenue
+        const id = '648c9369a4896442f8b8a21e';
+        const updateData = { totalRevenue: result2, countCompleteOrders: count }
+        const options = { new: true };
+        const updatedDocument = await Statistic.findByIdAndUpdate(id, updateData, options)
+        await updatedDocument.save()
         const data = await Statistic.find();
         res.json(data)
     } catch (e) {
