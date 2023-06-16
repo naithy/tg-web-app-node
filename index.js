@@ -220,8 +220,10 @@ app.get('/stats', async (req, res) => {
         const count = await CompleteOrder.countDocuments({});
         const result = await CompleteOrder.aggregate([{ $group: {_id: null, totalRevenue: {$sum: "$revenue" } } }]);
         const result2 = result[0].totalRevenue
+        const result3 = await CompleteOrder.aggregate([{ $group: {_id: null, totalPrice: {$sum: "$totalPrice" } } }]);
+        const result4 = result3[0].totalPrice
         const id = '648c9369a4896442f8b8a21e';
-        const updateData = { totalRevenue: result2, countCompleteOrders: count }
+        const updateData = { totalRevenue: result2, countCompleteOrders: count, revenue: result4 }
         const options = { new: true };
         const updatedDocument = await Statistic.findByIdAndUpdate(id, updateData, options)
         await updatedDocument.save()
