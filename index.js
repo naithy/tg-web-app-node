@@ -42,7 +42,7 @@ const start = async () => {
             useUnifiedTopology: true
         })
         server.listen(443, () => {
-            console.log('Server running 8000 port')
+            console.log('Server running 443 port')
         })
     } catch (e) {
         console.log(e)
