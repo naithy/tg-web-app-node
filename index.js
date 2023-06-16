@@ -205,14 +205,8 @@ app.post('/complete-order', async (req, res) => {
 });
 
 app.get('/complete-order', async (req, res) => {
-    try {
-        const result = await CompleteOrder.aggregate([
-            { $group: { $group: {_id: null, totalRevenue: {$sum: "$revenue" } } },}
-        ]);
-        console.log(result)
-    } catch (error) {
-            console.log(error);
-        }
+    const result = await CompleteOrder.aggregate([{ $group: { $group: {_id: null, totalRevenue: {$sum: "$revenue" } } }}]);
+    console.log(result)
 
     try {
         const data = await CompleteOrder.find();
