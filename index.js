@@ -222,7 +222,7 @@ app.get('/stats', async (req, res) => {
         Statistic.findByIdAndUpdate("648c9369a4896442f8b8a21e", {
             countCompleteOrders: 2,
             totalRevenue: result[0].totalRevenue
-        })
+        }, { new: true })
         const data = await Statistic.find();
         res.json(data)
     } catch (e) {
