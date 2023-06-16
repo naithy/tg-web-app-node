@@ -185,7 +185,7 @@ app.put('/product', async (req, res) => {
 
 app.post('/complete-order', async (req, res) => {
     const {_id, first_name, username, totalPrice, cart, birthday, number, createdAt, defected} = req.body;
-    console.log(defected)
+    console.log(req.body)
     try {
         // const completedOrder = new CompleteOrder({
         //     _id: _id,
