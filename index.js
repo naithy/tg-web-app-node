@@ -12,10 +12,10 @@ const CompleteOrder = require('./models/CompletedOrder')
 const Statistic = require('./models/Stats')
 
 
-const options = {
-    cert: fs.readFileSync('fullchain.pem'),
-    key: fs.readFileSync('privkey.pem')
-};
+// const options = {
+//     cert: fs.readFileSync('fullchain.pem'),
+//     key: fs.readFileSync('privkey.pem')
+// };
 
 const token = process.env.TOKEN;
 
@@ -27,13 +27,13 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-const server = https.createServer(options, app)
-
-const io = socketIo(server, {
-    cors: {
-        origin: 'http://localhost:3000'
-    }
-});
+// const server = https.createServer(options, app)
+//
+// const io = socketIo(server, {
+//     cors: {
+//         origin: 'http://localhost:3000'
+//     }
+// });
 
 const start = async () => {
     try {
@@ -41,8 +41,8 @@ const start = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
-        server.listen(443, () => {
-            console.log('Server running 443 port')
+        app.listen(8080, () => {
+            console.log('Server running 8080 port')
         })
     } catch (e) {
         console.log(e)
