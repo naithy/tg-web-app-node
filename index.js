@@ -36,10 +36,10 @@ const io = socketIo(server, {
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb://localhost:27001/test', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        })
+        // await mongoose.connect('mongodb://localhost:27001/test', {
+        //     useNewUrlParser: true,
+        //     useUnifiedTopology: true
+        // })
         server.listen(3000, () => {
             console.log('Server running 3000 port')
         })
