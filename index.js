@@ -9,6 +9,8 @@ const bodyParser = require('body-parser')
 const CompleteOrder = require('./models/CompletedOrder')
 const Statistic = require('./models/Stats')
 
+
+
 const token = process.env.TOKEN;
 
 const bot = new TelegramBot(token, {polling: true});
@@ -19,13 +21,22 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
+
+const io = socketIo(server, {
+    cors: {
+        origin: 'https://sakurashopadmin260119.netlify.app'
+    }
+});
+
 const start = async () => {
     try {
         await mongoose.connect('mongodb://localhost:27001/test', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
-        app.listen(3000)
+        app.listen(3000, () => {
+            console.log('Server running 3000 port')
+        })
     } catch (e) {
         console.log(e)
     }
