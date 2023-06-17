@@ -31,7 +31,7 @@ const io = socketIo(server, {
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb://0.0.0.0:27001/test', {
+        await mongoose.connect('mongodb://127.0.0.1:27001/test', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
