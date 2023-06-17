@@ -41,9 +41,10 @@ const start = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
-        app.listen(8080, () => {
-            console.log('Server running 8080 port')
-        })
+        app.listen(8080);
+        // server.listen(443, () => {
+        //     console.log('Server running 443 port')
+        // })
     } catch (e) {
         console.log(e)
     }
