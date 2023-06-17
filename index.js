@@ -37,10 +37,10 @@ const io = socketIo(server, {
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb://127.0.0.1:27001/test', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        })
+        // await mongoose.connect('mongodb://127.0.0.1:27001/test', {
+        //     useNewUrlParser: true,
+        //     useUnifiedTopology: true
+        // })
         server.listen(443, () => {
             console.log('Server running 443 port')
         })
