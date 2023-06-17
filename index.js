@@ -234,8 +234,10 @@ app.get('/stats', async (req, res) => {
         console.log(e)
     }
 })
-
+app.use(express.static('static'));
 // start()
+app.get('/health-check', (req, res) => res.sendStatus(200));
+
 app.listen(443, () => {
     console.log(`Example app listening on port 443`)
 })
