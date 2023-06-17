@@ -1,6 +1,8 @@
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const cors = require('cors');
+const https = require('https');
+const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
 const socketIo = require('socket.io')
@@ -10,6 +12,9 @@ const CompleteOrder = require('./models/CompletedOrder')
 const Statistic = require('./models/Stats')
 
 
+const options = {
+
+};
 
 const token = process.env.TOKEN;
 
@@ -21,6 +26,7 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
+const server = https.createServer(options, app)
 
 const io = socketIo(server, {
     cors: {
@@ -34,7 +40,7 @@ const start = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
-        app.listen(3000, () => {
+        server.listen(3000, () => {
             console.log('Server running 3000 port')
         })
     } catch (e) {
