@@ -12,10 +12,10 @@ const CompleteOrder = require('./models/CompletedOrder')
 const Statistic = require('./models/Stats')
 
 
-// const options = {
-//     cert: fs.readFileSync('fullchain.pem'),
-//     key: fs.readFileSync('privkey.pem')
-// };
+const options = {
+    cert: fs.readFileSync('cert.pem'),
+    key: fs.readFileSync('key.pem')
+};
 
 const token = process.env.TOKEN;
 
@@ -27,63 +27,62 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-// const server = https.createServer(options, app)
-//
-// const io = socketIo(server, {
-//     cors: {
-//         origin: 'http://localhost:3000'
-//     }
-// });
+const server = https.createServer(options, app)
 
-// const start = async () => {
-//     try {
-//         await mongoose.connect('mongodb://localhost:27001/test', {
-//             useNewUrlParser: true,
-//             useUnifiedTopology: true
-//         })
-//         app.listen(8080);
-//         // server.listen(443, () => {
-//         //     console.log('Server running 443 port')
-//         // })
-//     } catch (e) {
-//         console.log(e)
-//     }
-// };
+const io = socketIo(server, {
+    cors: {
+        origin: 'http://localhost:3000'
+    }
+});
+
+const start = async () => {
+    try {
+        await mongoose.connect('mongodb://localhost:27001/test', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
+        server.listen(443, () => {
+            console.log('Server running 443 port')
+        })
+    } catch (e) {
+        console.log(e)
+    }
+};
 
 
-// io.on('connection', async (socket) => {
-//     try {
-//         const customers = await Customer.find();
-//         socket.emit('items', customers);
-//     } catch (err) {
-//         console.error(err);
-//     }
-//
-//     const changeStream = Customer.watch();
-//     changeStream.on('change', (change) => {
-//         if (change.operationType === 'insert') {
-//             const customer = {
-//                 _id: change.fullDocument._id,
-//                 first_name: change.fullDocument.first_name,
-//                 username: change.fullDocument.username,
-//                 totalPrice: change.fullDocument.totalPrice,
-//                 cart: change.fullDocument.cart,
-//                 birthday: change.fullDocument.birthday,
-//                 number: change.fullDocument.number,
-//                 createdAt: change.fullDocument.createdAt,
-//             };
-//             socket.emit('changeData', customer);
-//         } else if (change.operationType === 'update') {
-//             const updatedCustomer = {
-//                 _id: change.documentKey._id,
-//                 ...change.updateDescription.updatedFields,
-//             };
-//             socket.emit('updateData', updatedCustomer);
-//         } else if (change.operationType === 'delete') {
-//             socket.emit('deleteData', change.documentKey._id);
-//         }
-//     });
-// });
+io.on('connection', async (socket) => {
+    try {
+        const customers = await Customer.find();
+        socket.emit('items', customers);
+    } catch (err) {
+        console.error(err);
+    }
+
+    const changeStream = Customer.watch();
+    changeStream.on('change', (change) => {
+        if (change.operationType === 'insert') {
+            const customer = {
+                _id: change.fullDocument._id,
+                first_name: change.fullDocument.first_name,
+                username: change.fullDocument.username,
+                totalPrice: change.fullDocument.totalPrice,
+                cart: change.fullDocument.cart,
+                birthday: change.fullDocument.birthday,
+                number: change.fullDocument.number,
+                createdAt: change.fullDocument.createdAt,
+            };
+            socket.emit('changeData', customer);
+        } else if (change.operationType === 'update') {
+            const updatedCustomer = {
+                _id: change.documentKey._id,
+                ...change.updateDescription.updatedFields,
+            };
+            socket.emit('updateData', updatedCustomer);
+        } else if (change.operationType === 'delete') {
+            socket.emit('deleteData', change.documentKey._id);
+        }
+    });
+});
 
 
 bot.on('message', async (msg) => {
@@ -234,10 +233,5 @@ app.get('/stats', async (req, res) => {
         console.log(e)
     }
 })
-app.use(express.static('static'));
-// start()
-app.get('/health-check', (req, res) => res.sendStatus(200));
 
-app.listen(443, () => {
-    console.log(`Example app listening on port 443`)
-})
+start()
