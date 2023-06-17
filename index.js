@@ -31,10 +31,10 @@ const server = http.createServer(app);
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb://localhost:27001/test', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        })
+        // await mongoose.connect('mongodb://localhost:27001/test', {
+        //     useNewUrlParser: true,
+        //     useUnifiedTopology: true
+        // })
         server.listen(443, () => {
             console.log('Server running 3000 port')
         })
