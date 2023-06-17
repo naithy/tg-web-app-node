@@ -1,8 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const cors = require('cors');
-const https = require('https');
-const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
 const socketIo = require('socket.io')
@@ -10,12 +8,6 @@ const Product = require('./models/Product')
 const bodyParser = require('body-parser')
 const CompleteOrder = require('./models/CompletedOrder')
 const Statistic = require('./models/Stats')
-
-
-const options = {
-    cert: fs.readFileSync('fullchain.pem'),
-    key: fs.readFileSync('privkey.pem')
-};
 
 const token = process.env.TOKEN;
 
@@ -27,23 +19,13 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-const server = https.createServer(options, app)
-
-const io = socketIo(server, {
-    cors: {
-        origin: 'https://sakurashopadmin260119.netlify.app'
-    }
-});
-
 const start = async () => {
     try {
         await mongoose.connect('mongodb://localhost:27001/test', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
-        server.listen(443, () => {
-            console.log('Server running 443 port')
-        })
+        app.listen(3000)
     } catch (e) {
         console.log(e)
     }
