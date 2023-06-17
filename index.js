@@ -13,8 +13,8 @@ const Statistic = require('./models/Stats')
 
 
 const options = {
-    cert: fs.readFileSync('cert.pem'),
-    key: fs.readFileSync('key.pem')
+    cert: fs.readFileSync('fullchain.pem'),
+    key: fs.readFileSync('privkey.pem')
 };
 
 const token = process.env.TOKEN;
@@ -25,23 +25,22 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.json());
-app.use(express.static(__dirname + '/static', { dotfiles: 'allow' }))
 
 
 const server = https.createServer(options, app)
 
 const io = socketIo(server, {
     cors: {
-        origin: 'http://localhost:3000'
+        origin: 'https://sakurashopadmin260119.netlify.app'
     }
 });
 
 const start = async () => {
     try {
-        // await mongoose.connect('mongodb://127.0.0.1:27001/test', {
-        //     useNewUrlParser: true,
-        //     useUnifiedTopology: true
-        // })
+        await mongoose.connect('mongodb://localhost:27001/test', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
         server.listen(443, () => {
             console.log('Server running 443 port')
         })
