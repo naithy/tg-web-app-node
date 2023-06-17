@@ -35,7 +35,7 @@ const start = async () => {
         //     useNewUrlParser: true,
         //     useUnifiedTopology: true
         // })
-        server.listen(443, () => {
+        server.listen(3000, () => {
             console.log('Server running 3000 port')
         })
     } catch (e) {
