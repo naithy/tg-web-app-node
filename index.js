@@ -25,6 +25,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/static', { dotfiles: 'allow' }))
 
 
 const server = https.createServer(options, app)
