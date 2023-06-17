@@ -35,20 +35,20 @@ app.use(bodyParser.json());
 //     }
 // });
 
-const start = async () => {
-    try {
-        await mongoose.connect('mongodb://localhost:27001/test', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        })
-        app.listen(8080);
-        // server.listen(443, () => {
-        //     console.log('Server running 443 port')
-        // })
-    } catch (e) {
-        console.log(e)
-    }
-};
+// const start = async () => {
+//     try {
+//         await mongoose.connect('mongodb://localhost:27001/test', {
+//             useNewUrlParser: true,
+//             useUnifiedTopology: true
+//         })
+//         app.listen(8080);
+//         // server.listen(443, () => {
+//         //     console.log('Server running 443 port')
+//         // })
+//     } catch (e) {
+//         console.log(e)
+//     }
+// };
 
 
 // io.on('connection', async (socket) => {
@@ -235,4 +235,5 @@ app.get('/stats', async (req, res) => {
     }
 })
 
-start()
+// start()
+app.listen(8080);
