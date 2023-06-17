@@ -23,11 +23,11 @@ app.use(bodyParser.json());
 
 const server = http.createServer(app);
 
-// const io = socketIo(server, {
-//     cors: {
-//         origin: 'https://sakurashopadmin260119.netlify.app'
-//     }
-// });
+const io = socketIo(server, {
+    cors: {
+        origin: 'https://sakurashopadmin260119.netlify.app'
+    }
+});
 
 const start = async () => {
     try {
@@ -44,39 +44,39 @@ const start = async () => {
 };
 
 
-// io.on('connection', async (socket) => {
-//     try {
-//         const customers = await Customer.find();
-//         socket.emit('items', customers);
-//     } catch (err) {
-//         console.error(err);
-//     }
-//
-//     const changeStream = Customer.watch();
-//     changeStream.on('change', (change) => {
-//         if (change.operationType === 'insert') {
-//             const customer = {
-//                 _id: change.fullDocument._id,
-//                 first_name: change.fullDocument.first_name,
-//                 username: change.fullDocument.username,
-//                 totalPrice: change.fullDocument.totalPrice,
-//                 cart: change.fullDocument.cart,
-//                 birthday: change.fullDocument.birthday,
-//                 number: change.fullDocument.number,
-//                 createdAt: change.fullDocument.createdAt,
-//             };
-//             socket.emit('changeData', customer);
-//         } else if (change.operationType === 'update') {
-//             const updatedCustomer = {
-//                 _id: change.documentKey._id,
-//                 ...change.updateDescription.updatedFields,
-//             };
-//             socket.emit('updateData', updatedCustomer);
-//         } else if (change.operationType === 'delete') {
-//             socket.emit('deleteData', change.documentKey._id);
-//         }
-//     });
-// });
+io.on('connection', async (socket) => {
+    try {
+        const customers = await Customer.find();
+        socket.emit('items', customers);
+    } catch (err) {
+        console.error(err);
+    }
+
+    const changeStream = Customer.watch();
+    changeStream.on('change', (change) => {
+        if (change.operationType === 'insert') {
+            const customer = {
+                _id: change.fullDocument._id,
+                first_name: change.fullDocument.first_name,
+                username: change.fullDocument.username,
+                totalPrice: change.fullDocument.totalPrice,
+                cart: change.fullDocument.cart,
+                birthday: change.fullDocument.birthday,
+                number: change.fullDocument.number,
+                createdAt: change.fullDocument.createdAt,
+            };
+            socket.emit('changeData', customer);
+        } else if (change.operationType === 'update') {
+            const updatedCustomer = {
+                _id: change.documentKey._id,
+                ...change.updateDescription.updatedFields,
+            };
+            socket.emit('updateData', updatedCustomer);
+        } else if (change.operationType === 'delete') {
+            socket.emit('deleteData', change.documentKey._id);
+        }
+    });
+});
 
 
 bot.on('message', async (msg) => {
