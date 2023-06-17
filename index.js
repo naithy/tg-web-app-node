@@ -2,7 +2,6 @@ const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
-const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
 const socketIo = require('socket.io')
