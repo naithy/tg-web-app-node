@@ -1,7 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const cors = require('cors');
-const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const mongoose = require('mongoose');
 const Customer = require('./models/Customer');
@@ -11,10 +11,6 @@ const bodyParser = require('body-parser')
 const CompleteOrder = require('./models/CompletedOrder')
 const Statistic = require('./models/Stats')
 
-
-const options = {
-
-};
 
 const token = process.env.TOKEN;
 
@@ -26,7 +22,7 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
-const server = https.createServer(options, app)
+const server = http.createServer(app);
 
 const io = socketIo(server, {
     cors: {
