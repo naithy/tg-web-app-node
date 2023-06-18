@@ -129,14 +129,13 @@ app.delete('/web-data', async (req, res) => {
 });
 
 app.get('/product', async (req, res) => {
+    console.time('Роут поиск товаров')
     try {
         const category = req.query.category;
         if (!!category) {
 
             const data = await Product.find({category} )
-            console.time('Роут поиск товаров')
             res.json(data)
-            console.timeEnd('Роут поиск товаров')
         } else {
             const data = await Product.find()
             res.json(data)
@@ -145,6 +144,7 @@ app.get('/product', async (req, res) => {
         console.error('Error fetching products:', e);
         res.sendStatus(500);
     }
+    console.timeEnd('Роут поиск товаров')
 });
 
 app.post('/product', async (req, res) => {
