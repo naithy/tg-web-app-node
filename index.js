@@ -196,6 +196,7 @@ app.post('/complete-order', async (req, res) => {
         });
         await completedOrder.save()
 
+        console.log(toUpdate)
         for await (const [productId, productData] of Object.entries(toUpdate)) {
             const product = await Product.findById(productId);
 
@@ -213,6 +214,8 @@ app.post('/complete-order', async (req, res) => {
                 product.flavors[flavor] -= count;
             }
 
+
+            console.log(product)
             await product.save();
             console.log(`Product ${productId} updated successfully!`);
         }
