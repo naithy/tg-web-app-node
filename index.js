@@ -196,7 +196,23 @@ app.post('/complete-order', async (req, res) => {
         });
         await completedOrder.save()
 
-        console.log(toUpdate)
+        for (const [productId, productData] of Object.entries(toUpdate)) {
+            const product = await Product.findById(productId);
+
+            if (!product) {
+                continue;
+            }
+
+            for (const [flavor, count] of Object.entries(productData.flavors)) {
+                if (!product.flavors[flavor]) {
+                    continue;
+                }
+
+                product.flavors[flavor] -= count;
+            }
+
+            await product.save();
+        }
 
     } catch (e) {
         console.log(e)
