@@ -46,10 +46,8 @@ const start = async () => {
 
 io.on('connection', async (socket) => {
     try {
-        console.time('Сокет поиск клиентов')
         const customers = await Customer.find();
         socket.emit('items', customers);
-        console.timeEnd('Сокет поиск клиентов')
     } catch (err) {
         console.error(err);
     }
