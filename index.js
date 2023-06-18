@@ -194,26 +194,27 @@ app.post('/complete-order', async (req, res) => {
         await completedOrder.save()
 
         for await (const [productId, productData] of Object.entries(toUpdate)) {
-            const product = await Product.findById(productId);
-
-            if (!product) {
-
-                continue;
-            }
-
-            for await (const [flavor, count] of Object.entries(productData.flavors)) {
-                if (!product.flavors[flavor]) {
-
-                    continue;
-                }
-
-                product.flavors[flavor] -= count;
-            }
-
-            console.log(product)
-            await product.save();
+            const product = await Product.findByIdAndUpdate(
+                productId,
+                {
+                    $inc: {
+                        price: productData.price
+                    },
+                    $set: {
+                        title: productData.title,
+                        flavors: Object.entries(productData.flavors).reduce((acc, [flavor, count]) => {
+                            if (product.flavors[flavor]) {
+                                acc[flavor] = product.flavors[flavor] - count;
+                            }
+                            return acc;
+                        }, {})
+                    }
+                },
+                { new: true }
+            );
 
         }
+
     } catch (e) {
 
     }
