@@ -196,15 +196,17 @@ app.post('/complete-order', async (req, res) => {
         });
         await completedOrder.save()
 
-        for (const [productId, productData] of Object.entries(toUpdate)) {
-            const product = await Product.findById(productId);
+        for await (const [productId, productData] of Object.entries(toUpdate)) {
+            const product = await Products.findById(productId);
 
             if (!product) {
+                console.error(`Product with ID ${productId} not found!`);
                 continue;
             }
 
-            for (const [flavor, count] of Object.entries(productData.flavors)) {
+            for await (const [flavor, count] of Object.entries(productData.flavors)) {
                 if (!product.flavors[flavor]) {
+                    console.error(`Flavor ${flavor} not found for product ${productId}!`);
                     continue;
                 }
 
@@ -212,8 +214,8 @@ app.post('/complete-order', async (req, res) => {
             }
 
             await product.save();
+            console.log(`Product ${productId} updated successfully!`);
         }
-
     } catch (e) {
         console.log(e)
     }
