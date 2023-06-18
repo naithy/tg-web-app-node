@@ -180,7 +180,7 @@ app.put('/product', async (req, res) => {
 });
 
 app.post('/complete-order', async (req, res) => {
-    const {_id, first_name, username, totalPrice, cart, birthday, number, createdAt, defected, revenue} = req.body;
+    const {_id, first_name, username, totalPrice, cart, birthday, number, createdAt, defected, revenue, toUpdate} = req.body;
     try {
         const completedOrder = new CompleteOrder({
             _id: _id,
@@ -195,6 +195,20 @@ app.post('/complete-order', async (req, res) => {
             defected: defected,
         });
         await completedOrder.save()
+
+        Object.entries(toUpdate).forEach(async ([id, data]) => {
+            const product = await Products.findById(id);
+            if (!product) {
+                return;
+            }
+            Object.entries(data.flavors).forEach(([flavor, count]) => {
+                if (product.flavors[flavor]) {
+                    product.flavors[flavor] -= count;
+                }
+            });
+            await product.save();
+        });
+
     } catch (e) {
         console.log(e)
     }
@@ -223,7 +237,6 @@ app.get('/stats', async (req, res) => {
         await updatedDocument.save()
         const data = await Statistic.find();
         res.json(data)
-        console.log('fetched')
     } catch (e) {
         console.log(e)
     }
