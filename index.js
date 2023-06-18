@@ -196,28 +196,24 @@ app.post('/complete-order', async (req, res) => {
         });
         await completedOrder.save()
 
-        console.log(toUpdate)
         for await (const [productId, productData] of Object.entries(toUpdate)) {
-            const product = await Product.findById(productId);
-
-            if (!product) {
+            const updateObj = {};
+            for await (const [flavor, count] of Object.entries(productData.flavors)) {
+                updateObj[`flavors.${flavor}`] = -count;
+            }
+            const updatedProduct = await Product.findByIdAndUpdate(
+                productId,
+                { $inc: updateObj },
+                { new: true }
+            );
+            if (!updatedProduct) {
                 console.error(`Product with ID ${productId} not found!`);
                 continue;
             }
-
-            for await (const [flavor, count] of Object.entries(productData.flavors)) {
-                if (!product.flavors[flavor]) {
-                    console.error(`Flavor ${flavor} not found for product ${productId}!`);
-                    continue;
-                }
-
-                product.flavors[flavor] -= count;
-            }
-
-
-            Product.findOneAndReplace({_id: productId}, product)
+            console.log(updatedProduct);
             console.log(`Product ${productId} updated successfully!`);
         }
+
     } catch (e) {
         console.log(e)
     }
