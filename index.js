@@ -36,10 +36,10 @@ const start = async () => {
             useUnifiedTopology: true
         })
         server.listen(3000, () => {
-
+            console.log('Server running 3000 port')
         })
     } catch (e) {
-
+        console.log(e)
     }
 };
 
@@ -99,6 +99,7 @@ app.post('/web-data', async (req, res) => {
         customer.save()
         return res.status(201).json({});
     } catch (e) {
+        console.log(e)
         return res.status(500).json({})
     }
 });
@@ -120,6 +121,7 @@ app.delete('/web-data', async (req, res) => {
         await Customer.deleteOne({ _id: id })
         res.status(200)
     } catch (error) {
+        console.log(error);
         res.status(500).send(error.message)
     }
 });
@@ -153,17 +155,18 @@ app.post('/product', async (req, res) => {
         });
         product.save()
     } catch (e) {
-
+        console.log(e)
     }
 
 });
 
 app.delete('/product', async (req, res) => {
     const {id} = req.body
+    console.log(id)
     try {
         await Product.deleteOne({_id: id})
     } catch (e) {
-
+        console.log(e)
     }
 });
 
@@ -172,7 +175,7 @@ app.put('/product', async (req, res) => {
     try {
         await Product.replaceOne({_id}, req.body)
     } catch (e) {
-
+        console.log(e)
     }
 });
 
@@ -193,30 +196,30 @@ app.post('/complete-order', async (req, res) => {
         });
         await completedOrder.save()
 
+        console.log(toUpdate)
         for await (const [productId, productData] of Object.entries(toUpdate)) {
-            const product = await Product.findByIdAndUpdate(
-                productId,
-                {
-                    $inc: {
-                        price: productData.price
-                    },
-                    $set: {
-                        title: productData.title,
-                        flavors: Object.entries(productData.flavors).reduce((acc, [flavor, count]) => {
-                            if (product.flavors[flavor]) {
-                                acc[flavor] = product.flavors[flavor] - count;
-                            }
-                            return acc;
-                        }, {})
-                    }
-                },
-                { new: true }
-            );
+            const product = await Product.findById(productId);
 
+            if (!product) {
+                console.error(`Product with ID ${productId} not found!`);
+                continue;
+            }
+
+            for await (const [flavor, count] of Object.entries(productData.flavors)) {
+                if (!product.flavors[flavor]) {
+                    console.error(`Flavor ${flavor} not found for product ${productId}!`);
+                    continue;
+                }
+
+                product.flavors[flavor] -= count;
+            }
+
+
+            Product.findOneAndReplace({_id: productId}, product)
+            console.log(`Product ${productId} updated successfully!`);
         }
-
     } catch (e) {
-
+        console.log(e)
     }
 });
 
@@ -225,7 +228,7 @@ app.get('/complete-order', async (req, res) => {
         const data = await CompleteOrder.find();
         res.json(data)
     } catch (e) {
-
+        console.log(e)
     }
 });
 
@@ -244,7 +247,7 @@ app.get('/stats', async (req, res) => {
         const data = await Statistic.find();
         res.json(data)
     } catch (e) {
-
+        console.log(e)
     }
 })
 
