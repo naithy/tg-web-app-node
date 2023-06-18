@@ -46,8 +46,10 @@ const start = async () => {
 
 io.on('connection', async (socket) => {
     try {
+        console.time('Сокет поиск клиентов')
         const customers = await Customer.find();
         socket.emit('items', customers);
+        console.timeEnd('Сокет поиск клиентов')
     } catch (err) {
         console.error(err);
     }
@@ -128,10 +130,12 @@ app.delete('/web-data', async (req, res) => {
 
 app.get('/product', async (req, res) => {
     try {
+        console.time('Роут поиск товаров')
         const category = req.query.category;
         if (!!category) {
             const data = await Product.find({category} )
             res.json(data)
+            console.timeEnd('Роут поиск товаров')
         } else {
             const data = await Product.find()
             res.json(data)
