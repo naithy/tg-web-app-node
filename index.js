@@ -31,7 +31,7 @@ const io = socketIo(server, {
 
 const start = async () => {
     try {
-        await mongoose.createConnection('mongodb://localhost:27001/test', {
+        await mongoose.connect('mongodb://127.0.0.1:27017/test?maxPoolSize=2', {
             maxPoolSize: 2,
             useNewUrlParser: true,
             useUnifiedTopology: true
