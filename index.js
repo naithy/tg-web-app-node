@@ -132,10 +132,11 @@ app.get('/product', async (req, res) => {
     try {
         const category = req.query.category;
         if (!!category) {
-            console.time('Роут поиск товаров')
+
             const data = await Product.find({category} )
-            console.timeEnd('Роут поиск товаров')
+            console.time('Роут поиск товаров')
             res.json(data)
+            console.timeEnd('Роут поиск товаров')
         } else {
             const data = await Product.find()
             res.json(data)
