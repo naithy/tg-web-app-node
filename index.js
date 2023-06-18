@@ -130,12 +130,12 @@ app.delete('/web-data', async (req, res) => {
 
 app.get('/product', async (req, res) => {
     try {
-        console.time('Роут поиск товаров')
         const category = req.query.category;
         if (!!category) {
+            console.time('Роут поиск товаров')
             const data = await Product.find({category} )
-            res.json(data)
             console.timeEnd('Роут поиск товаров')
+            res.json(data)
         } else {
             const data = await Product.find()
             res.json(data)
