@@ -31,7 +31,7 @@ const io = socketIo(server, {
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/test', {
+        await mongoose.connect('mongodb://localhost:27001/test', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
@@ -46,8 +46,10 @@ const start = async () => {
 
 io.on('connection', async (socket) => {
     try {
+        console.time('Сокет поиск клиентов')
         const customers = await Customer.find();
         socket.emit('items', customers);
+        console.timeEnd('Сокет поиск клиентов')
     } catch (err) {
         console.error(err);
     }
@@ -132,7 +134,9 @@ app.get('/product', async (req, res) => {
         if (!!category) {
 
             const data = await Product.find({category} )
+            console.time('Роут поиск товаров')
             res.json(data)
+            console.timeEnd('Роут поиск товаров')
         } else {
             const data = await Product.find()
             res.json(data)
