@@ -197,7 +197,7 @@ app.post('/complete-order', async (req, res) => {
         await completedOrder.save()
 
         for await (const [productId, productData] of Object.entries(toUpdate)) {
-            const product = await Products.findById(productId);
+            const product = await Product.findById(productId);
 
             if (!product) {
                 console.error(`Product with ID ${productId} not found!`);
