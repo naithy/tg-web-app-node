@@ -196,18 +196,7 @@ app.post('/complete-order', async (req, res) => {
         });
         await completedOrder.save()
 
-        Object.entries(toUpdate).forEach(async ([id, data]) => {
-            const product = await Products.findById(id);
-            if (!product) {
-                return;
-            }
-            Object.entries(data.flavors).forEach(([flavor, count]) => {
-                if (product.flavors[flavor]) {
-                    product.flavors[flavor] -= count;
-                }
-            });
-            await product.save();
-        });
+        console.log(toUpdate)
 
     } catch (e) {
         console.log(e)
