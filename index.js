@@ -210,7 +210,7 @@ app.post('/complete-order', async (req, res) => {
                 product.flavors[flavor] -= count;
             }
 
-
+            console.log(product)
             await product.save();
 
         }
