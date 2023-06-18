@@ -25,7 +25,7 @@ const server = http.createServer(app);
 
 const io = socketIo(server, {
     cors: {
-        origin: 'https://sakurashopadmin260119.netlify.app'
+        origin: 'http://localhost:3000'
     }
 });
 
