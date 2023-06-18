@@ -31,8 +31,7 @@ const io = socketIo(server, {
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/test?maxPoolSize=12', {
-            maxPoolSize: 12,
+        await mongoose.connect('mongodb://127.0.0.1:27017/test', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
