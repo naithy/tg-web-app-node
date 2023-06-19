@@ -39,19 +39,17 @@ const start = async () => {
             console.log('Server running 3000 port')
         })
     } catch (e) {
-        console.log(e)
+
     }
 };
 
 
 io.on('connection', async (socket) => {
     try {
-        console.time('Сокет поиск клиентов')
         const customers = await Customer.find();
         socket.emit('items', customers);
-        console.timeEnd('Сокет поиск клиентов')
     } catch (err) {
-        console.error(err);
+
     }
 
     const changeStream = Customer.watch();
@@ -101,7 +99,7 @@ app.post('/web-data', async (req, res) => {
         customer.save()
         return res.status(201).json({});
     } catch (e) {
-        console.log(e)
+
         return res.status(500).json({})
     }
 });
@@ -123,7 +121,7 @@ app.delete('/web-data', async (req, res) => {
         await Customer.deleteOne({ _id: id })
         res.status(200)
     } catch (error) {
-        console.log(error);
+
         res.status(500).send(error.message)
     }
 });
@@ -160,18 +158,18 @@ app.post('/product', async (req, res) => {
         });
         product.save()
     } catch (e) {
-        console.log(e)
+
     }
 
 });
 
 app.delete('/product', async (req, res) => {
     const {id} = req.body
-    console.log(id)
+
     try {
         await Product.deleteOne({_id: id})
     } catch (e) {
-        console.log(e)
+
     }
 });
 
@@ -180,7 +178,7 @@ app.put('/product', async (req, res) => {
     try {
         await Product.replaceOne({_id}, req.body)
     } catch (e) {
-        console.log(e)
+
     }
 });
 
@@ -212,15 +210,15 @@ app.post('/complete-order', async (req, res) => {
                 { new: true }
             );
             if (!updatedProduct) {
-                console.error(`Product with ID ${productId} not found!`);
+
                 continue;
             }
-            console.log(updatedProduct);
-            console.log(`Product ${productId} updated successfully!`);
+
+
         }
 
     } catch (e) {
-        console.log(e)
+
     }
 });
 
@@ -229,7 +227,7 @@ app.get('/complete-order', async (req, res) => {
         const data = await CompleteOrder.find();
         res.json(data)
     } catch (e) {
-        console.log(e)
+
     }
 });
 
@@ -248,7 +246,7 @@ app.get('/stats', async (req, res) => {
         const data = await Statistic.find();
         res.json(data)
     } catch (e) {
-        console.log(e)
+
     }
 })
 
