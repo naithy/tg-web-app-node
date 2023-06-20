@@ -3,6 +3,8 @@ const {Schema, model} = require('mongoose')
 
 const ProductSchema = new mongoose.Schema({
     category: String,
+    brand: String,
+    brandImg: String,
     title: String,
     price: Number,
     flavors: Object,
