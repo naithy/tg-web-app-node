@@ -146,10 +146,12 @@ app.get('/product', async (req, res) => {
 });
 
 app.post('/product', async (req, res) => {
-    const {category, title, price, flavors, description, img} = req.body
+    const {category, brand, brandImg, title, price, flavors, description, img} = req.body
     try {
         const product = new Product({
             category,
+            brand,
+            brandImg,
             title,
             price,
             flavors,
