@@ -3,12 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const mongoose = require('mongoose');
-const Customer = require('./models/Customer');
-const socketIo = require('socket.io')
-const Product = require('./models/Product')
-const bodyParser = require('body-parser')
-const CompleteOrder = require('./models/CompletedOrder')
-const Statistic = require('./models/Stats')
+const socketIo = require('socket.io');
+const bodyParser = require('body-parser');
 
 
 const token = process.env.TOKEN;
@@ -43,6 +39,10 @@ const start = async () => {
     }
 };
 
+const Customer = require('./models/Customer');
+const Product = require('./models/Product');
+const CompleteOrder = require('./models/CompletedOrder');
+const Statistic = require('./models/Stats');
 
 io.on('connection', async (socket) => {
     try {
