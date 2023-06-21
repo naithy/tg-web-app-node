@@ -46,7 +46,7 @@ const CompleteOrder = require('./models/CompletedOrder');
 const Statistic = require('./models/Stats');
 
 
-const wss = new WebSocket.Server({ port: 3000 });
+const wss = new WebSocket.server({ port: 8000 });
 
 wss.on('connection', async (socket) => {
     try {
