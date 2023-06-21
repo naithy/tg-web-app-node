@@ -287,7 +287,6 @@ app.get('/stats', async (req, res) => {
         await updatedDocument.save()
         const data = await Statistic.find();
         res.json(data)
-        console.log(count)
     } catch (e) {
 
     }
