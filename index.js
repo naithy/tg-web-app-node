@@ -5,6 +5,7 @@ const http = require('http');
 const mongoose = require('mongoose');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
+const WebSocket = require('ws');
 
 
 const token = process.env.TOKEN;
@@ -19,11 +20,11 @@ app.use(bodyParser.json());
 
 const server = http.createServer(app);
 
-const io = socketIo(server, {
-    cors: {
-        origin: 'http://localhost:3000'
-    }
-});
+// const io = socketIo(server, {
+//     cors: {
+//         origin: 'http://localhost:3000'
+//     }
+// });
 
 const start = async () => {
     try {
@@ -44,12 +45,15 @@ const Product = require('./models/Product');
 const CompleteOrder = require('./models/CompletedOrder');
 const Statistic = require('./models/Stats');
 
-io.on('connection', async (socket) => {
+
+const wss = new WebSocket.Server({ port: 8000 });
+
+wss.on('connection', async (socket) => {
     try {
         const customers = await Customer.find();
-        socket.emit('items', customers);
+        socket.send(JSON.stringify({ type: 'items', payload: customers }));
     } catch (err) {
-
+        console.error('Error retrieving items:', err);
     }
 
     const changeStream = Customer.watch();
@@ -65,18 +69,53 @@ io.on('connection', async (socket) => {
                 number: change.fullDocument.number,
                 createdAt: change.fullDocument.createdAt,
             };
-            socket.emit('changeData', customer);
+            socket.send(JSON.stringify({ type: 'changeData', payload: customer }));
         } else if (change.operationType === 'update') {
             const updatedCustomer = {
                 _id: change.documentKey._id,
                 ...change.updateDescription.updatedFields,
             };
-            socket.emit('updateData', updatedCustomer);
+            socket.send(JSON.stringify({ type: 'updateData', payload: updatedCustomer }));
         } else if (change.operationType === 'delete') {
-            socket.emit('deleteData', change.documentKey._id);
+            socket.send(JSON.stringify({ type: 'deleteData', payload: change.documentKey._id }));
         }
     });
 });
+
+
+// io.on('connection', async (socket) => {
+//     try {
+//         const customers = await Customer.find();
+//         socket.emit('items', customers);
+//     } catch (err) {
+//
+//     }
+//
+//     const changeStream = Customer.watch();
+//     changeStream.on('change', (change) => {
+//         if (change.operationType === 'insert') {
+//             const customer = {
+//                 _id: change.fullDocument._id,
+//                 first_name: change.fullDocument.first_name,
+//                 username: change.fullDocument.username,
+//                 totalPrice: change.fullDocument.totalPrice,
+//                 cart: change.fullDocument.cart,
+//                 birthday: change.fullDocument.birthday,
+//                 number: change.fullDocument.number,
+//                 createdAt: change.fullDocument.createdAt,
+//             };
+//             socket.emit('changeData', customer);
+//         } else if (change.operationType === 'update') {
+//             const updatedCustomer = {
+//                 _id: change.documentKey._id,
+//                 ...change.updateDescription.updatedFields,
+//             };
+//             socket.emit('updateData', updatedCustomer);
+//         } else if (change.operationType === 'delete') {
+//             socket.emit('deleteData', change.documentKey._id);
+//         }
+//     });
+// });
 
 
 bot.on('message', async (msg) => {
