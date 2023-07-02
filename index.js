@@ -87,7 +87,8 @@ bot.on('message', async (msg) => {
             reply_markup: {
                 keyboard: [
                     ['Доставка', 'Связь']
-                ]
+                ],
+                resize_keyboard: true
             }
         })
 
