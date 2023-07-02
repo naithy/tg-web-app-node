@@ -20,11 +20,6 @@ app.use(bodyParser.json());
 
 const server = http.createServer(app);
 
-// const io = socketIo(server, {
-//     cors: {
-//         origin: 'http://localhost:3000'
-//     }
-// });
 
 const start = async () => {
     try {
@@ -83,43 +78,27 @@ wss.on('connection', async (socket) => {
 });
 
 
-// io.on('connection', async (socket) => {
-//     try {
-//         const customers = await Customer.find();
-//         socket.emit('items', customers);
-//     } catch (err) {
-//
-//     }
-//
-//     const changeStream = Customer.watch();
-//     changeStream.on('change', (change) => {
-//         if (change.operationType === 'insert') {
-//             const customer = {
-//                 _id: change.fullDocument._id,
-//                 first_name: change.fullDocument.first_name,
-//                 username: change.fullDocument.username,
-//                 totalPrice: change.fullDocument.totalPrice,
-//                 cart: change.fullDocument.cart,
-//                 birthday: change.fullDocument.birthday,
-//                 number: change.fullDocument.number,
-//                 createdAt: change.fullDocument.createdAt,
-//             };
-//             socket.emit('changeData', customer);
-//         } else if (change.operationType === 'update') {
-//             const updatedCustomer = {
-//                 _id: change.documentKey._id,
-//                 ...change.updateDescription.updatedFields,
-//             };
-//             socket.emit('updateData', updatedCustomer);
-//         } else if (change.operationType === 'delete') {
-//             socket.emit('deleteData', change.documentKey._id);
-//         }
-//     });
-// });
-
-
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
+    const text = msg.text;
+
+    if(text === '/start') {
+        await bot.sendMessage(chatId, 'Ниже появится кнопка, заполни форму', {
+            reply_markup: {
+                keyboard: [
+                    [{text: 'Заполнить форму', web_app: {url: webAppUrl + '/form'}}]
+                ]
+            }
+        })
+
+        await bot.sendMessage(chatId, 'Заходи в наш интернет магазин по кнопке ниже', {
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
+                ]
+            }
+        })
+    }
     });
 
 
