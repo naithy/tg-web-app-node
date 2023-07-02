@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const mongoose = require('mongoose');
-const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const WebSocket = require('ws');
 
@@ -18,6 +17,7 @@ app.use(express.json())
 app.use(bodyParser.json());
 
 
+const webAppUrl = "https://sakurashop.netlify.app"
 const server = http.createServer(app);
 
 
