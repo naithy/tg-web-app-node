@@ -83,7 +83,7 @@ bot.on('message', async (msg) => {
     const text = msg.text;
 
     if(text === '/start') {
-        await bot.sendMessage(chatId, '', {
+        await bot.sendMessage(chatId, 'Чтобы сделать заказ нажми на кнопку "Каталог" в левом нижнем углу', {
             reply_markup: {
                 keyboard: [
                     ['Доставка', 'Связь']
