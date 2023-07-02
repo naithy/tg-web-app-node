@@ -89,10 +89,10 @@ bot.on('message', async (msg) => {
     ]);
 
     if(text === '/start') {
-        await bot.sendMessage(chatId, 'Чтобы сделать заказ нажми на кнопку "Каталог" в левом нижнем углу')
+        await bot.sendMessage(chatId, 'Чтобы сделать заказ нажми на кнопку "Меню" в левом нижнем углу')
     }
 
-    if (text === 'Доставка') {
+    if (text === '/delivery') {
         await bot.sendMessage(chatId, 'Коротко о системе доставки:\n' +
             '\n' +
             'Каждый заказ выполняется в порядке очереди.\n' +
@@ -105,8 +105,18 @@ bot.on('message', async (msg) => {
             'ПН-ВС 8:00 - 24:00 БЕЗ ВЫХОДНЫХ')
     }
 
-    if (text === 'Связь') {
+    if (text === '/contacts') {
         await bot.sendMessage(chatId, 'Связь с менеджером @sakura_manager')
+    }
+
+    if (text === '/catalog') {
+        await bot.sendMessage(chatId, 'Заходи в наш интернет магазин по кнопке ниже', {
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Сделать заказ', web_app: {url: webAppUrl}}]
+                ]
+            }
+        })
     }
 
     });
