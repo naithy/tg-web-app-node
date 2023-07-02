@@ -82,15 +82,14 @@ bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const text = msg.text;
 
+    bot.setMyCommands([
+        { command: "catalog", description: "Сделать заказ" },
+        { command: "contacts", description: "Связаться с менеджером" },
+        { command: "delivery", description: "Информация о доставке" },
+    ]);
+
     if(text === '/start') {
-        await bot.sendMessage(chatId, 'Чтобы сделать заказ нажми на кнопку "Каталог" в левом нижнем углу', {
-            reply_markup: {
-                keyboard: [
-                    ['Доставка', 'Связь']
-                ],
-                resize_keyboard: true
-            }
-        })
+        await bot.sendMessage(chatId, 'Чтобы сделать заказ нажми на кнопку "Каталог" в левом нижнем углу')
     }
 
     if (text === 'Доставка') {
