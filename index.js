@@ -271,6 +271,14 @@ app.get('/complete-order', async (req, res) => {
     }
 });
 
+app.delete('/complete-order', async  (req, res) => {
+    try {
+        await CompleteOrder.deleteMany()
+    } catch (e) {
+
+    }
+})
+
 app.get('/stats', async (req, res) => {
     try {
         const count = await CompleteOrder.countDocuments({});
